@@ -1,0 +1,71 @@
+[
+  {
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "weight": 1.5
+      }
+    ]
+  },
+  {
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "weight": 2
+      }
+    ]
+  },
+  {
+    "elementType": "labels",
+    "stylers": [
+      {
+        "saturation": 20
+      },
+      {
+        "weight": 2
+      }
+    ]
+  },
+  {
+    "elementType": "labels.text",
+    "stylers": [
+      {
+        "weight": 2
+      }
+    ]
+  },
+  {
+    "featureType": "administrative",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "poi",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "labels.icon",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "transit",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  }
+]

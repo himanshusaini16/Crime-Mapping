@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context="com.example.himanshu.crimemapping.LoginActivity">
+
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/usernameWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:hint="@string/username"
+        android:textColorHint="@color/white">
+
+        <EditText
+            android:id="@+id/username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:background="@drawable/underlinebg"
+            android:ems="20"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/white" />
+
+    </android.support.design.widget.TextInputLayout>
+
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/passwordWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/usernameWrapper"
+        android:layout_marginTop="70dp"
+        android:hint="@string/password"
+        android:textColorHint="@color/white">
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:background="@drawable/underlinebg"
+            android:ems="15"
+            android:inputType="textPassword"
+            android:textColor="@color/white" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/loginUser"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/passwordWrapper"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="90dp"
+        android:background="@drawable/button_rounded"
+        android:text="@string/log_in"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/notamember"
+        android:textSize="15sp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/not_a_member_sign_up_here"
+        android:textColor="@color/white"
+        android:layout_below="@+id/loginUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:onClick="SingUpNow"
+        android:layout_marginTop="10dp"
+        android:textSize="15sp"
+        android:textColor="@color/colorApplication"
+        android:text="@string/signup_now"
+        android:layout_toRightOf="@+id/notamember"
+        android:layout_below="@+id/loginUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

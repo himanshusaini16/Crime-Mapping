@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context="com.example.himanshu.crimemapping.SignupActivity">
+
+    <Button
+        android:id="@+id/startWithGoogle"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="60dp"
+        android:background="@drawable/button_rounded_gmail"
+        android:text="@string/start_using_google"
+        android:textColor="@color/white"
+        android:textSize="17sp" />
+
+    <TextView
+
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:gravity="center"
+        android:layout_marginTop="30dp"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:text="@string/or"
+        android:layout_below="@+id/startWithGoogle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

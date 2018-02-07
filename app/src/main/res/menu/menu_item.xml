@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/action_refresh"
+        android:icon="@drawable/ic_refresh_black_24dp"
+        android:orderInCategory="20"
+        android:title="@string/refresh"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/about_app"
+        android:orderInCategory="30"
+        android:title="@string/about_app"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/about_us"
+        android:orderInCategory="40"
+        android:title="@string/about_us"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/Share"
+        android:orderInCategory="50"
+        android:title="@string/share"
+        app:showAsAction="never" />
+
+</menu>
