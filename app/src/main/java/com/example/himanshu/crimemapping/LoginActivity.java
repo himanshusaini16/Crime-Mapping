@@ -39,7 +39,6 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
     String lnemail, lnpassword;
     private AlertDialog progressDialog;
     Intent s2;
-    UserSessionManager session;
 
     SharedPreferences sp;
     SharedPreferences.Editor ep;
