@@ -29,17 +29,60 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
+    <string name="prompt_selecione_crime">Select a Crime</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email completions."
     </string>
-
-
+    <string name="layout_addcrime_desciption">Description</string>
+    <string name="layout_addcrime_date">Approximate date it occurred:</string>
+    <string name="layout_addcrime_time">Approximate time:</string>
+    <string name="layout_addcrime_crimetype">Crime Type</string>
+    <string name="email">EMAIL</string>
     <string name="username">USERNAME</string>
     <string name="password">PASSWORD</string>
+    <string name="repassword">RE-ENTER PASSWORD</string>
     <string name="log_in">Log In</string>
     <string name="not_a_member_sign_up_here">Not a Member Yet?\u0020</string>
     <string name="signup_now"><u>SignUp Now</u></string>
     <string name="crime_list">Crime List</string>
-    <string name="start_using_google">Start Using Google</string>
+    <string name="start_using_google">Continue with Google</string>
     <string name="or">----------------------OR----------------------</string>
+    <string name="sign_up">Sign Up Now</string>
+    <string name="login_heading">LOGIN to Crime Mapping</string>
+
+
+    <string name="crime_assalt">Robbery</string>
+    <string name="crime_assalt_desc">Taking property from a person by force, threat of force, or fear</string>
+    <string name="crime_bank">Robbery at ATM</string>
+    <string name="crime_bank_desc">Robbery after leaving bank ATM</string>
+    <string name="crime_car">Motor Vehicle Theft</string>
+    <string name="crime_car_desc">Theft of a car, truck, motorcycle, or any motor vehicle</string>
+    <string name="crime_police">Police Station</string>
+    <string name="crime_police_desc">Enter the location of police stations</string>
+    <string name="crime_drugs">Drug Addicts</string>
+    <string name="crime_drugs_desc">Frequented venue by drug addicts</string>
+    <string name="crime_danplace">Dangerous place</string>
+    <string name="crime_danplace_desc">Location of dangerous places (slums or neighborhoods)</string>
+    <string name="crime_homicide">Homicide</string>
+    <string name="crime_homicide_desc">Murder, homicide or assassination of persons</string>
+    <string name="crime_robandkill">Robbery and killing</string>
+    <string name="crime_robandkill_desc">Robbery-murder of someone</string>
+    <string name="crime_garbage">Garbage</string>
+    <string name="crime_garbage_desc">Illegal garbage disposal on streets</string>
+    <string name="crime_moto">Bikers gang robbery</string>
+    <string name="crime_moto_desc">Robbery by motorcycle, bicycle or similar</string>
+    <string name="crime_hijack">Hijacking</string>
+    <string name="crime_hijack_desc">Hijacking in banks or similar kind</string>
+    <string name="crime_sex">Sexual violence</string>
+    <string name="crime_sex_desc">Sexual crime against women</string>
+    <string name="crime_loudsound">Loud Sound</string>
+    <string name="crime_loudsound_desc">Places with loud prohibited during opening hours</string>
+    <string name="crime_vandalism">Vandalism</string>
+    <string name="crime_vandalism_desc">Willful, malicious destruction, damage, or defacement of property</string>
+    <string name="crime_animal">Crime Against Animals</string>
+    <string name="crime_animal_desc">Cruelty and maltreatment of animals</string>
+    <string name="adddd">Add</string>
+    <string name="crime_descriptionnn">Crime Description:</string>
+    <string name="dateee">Date:</string>
+    <string name="timeee">Time:</string>
+    <string name="coordinatess">Coordinates:</string>
 </resources>

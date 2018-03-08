@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "535718128844",
+    "project_id": "firebase-crime-mapping"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:535718128844:android:3f7155b7f7a96009",
+        "android_client_info": {
+          "package_name": "com.example.himanshu.crimemapping"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "535718128844-kl6q4on773bbutv07k52as3cputq8rja.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "535718128844-hvg5pj8pt4un31ad9su85l32iplomh8d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.himanshu.crimemapping",
+            "certificate_hash": "eaf57a6585ce645510ce14aace158011f0393d92"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2J5vCFuMbZWgLjZpuGwTQRjJY5yjFwKk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

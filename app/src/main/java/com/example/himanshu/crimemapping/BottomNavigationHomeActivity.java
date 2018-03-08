@@ -1,8 +1,11 @@
 package com.example.himanshu.crimemapping;
 
+import com.example.himanshu.crimemapping.AppController;
+
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -12,6 +15,11 @@ import android.view.MenuItem;
 
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 
 public class BottomNavigationHomeActivity extends AppCompatActivity {
@@ -25,10 +33,14 @@ public class BottomNavigationHomeActivity extends AppCompatActivity {
 
         MobileAds.initialize(this, "ca-app-pub-4510895115386086~4521143649");
 
+
+
         setupNavigationView();
 
 
     }
+
+
 
 
     private void setupNavigationView() {
@@ -59,19 +71,21 @@ public class BottomNavigationHomeActivity extends AppCompatActivity {
 
             case R.id.navigation_crimemap:
                 pushFragment(new CrimeMapFragment());
+                getSupportActionBar().setTitle("Crime Map");
                 break;
 
             case R.id.navigation_crimelist:
                 pushFragment(new CrimeListFragment());
+                getSupportActionBar().setTitle("Crime List");
                 break;
 
             case R.id.navigation_profile:
                 pushFragment(new UserProfileFragment());
+                getSupportActionBar().setTitle("User Profile");
                 break;
 
         }
     }
-
 
     protected void pushFragment(Fragment fragment) {
         if (fragment == null)
@@ -82,6 +96,7 @@ public class BottomNavigationHomeActivity extends AppCompatActivity {
             FragmentTransaction ft = fragmentManager.beginTransaction();
             if (ft != null) {
                 ft.replace(R.id.rootLayout, fragment);
+                ft.addToBackStack("");
                 ft.commit();
             }
         }

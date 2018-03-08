@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/login"
     android:focusable="true"
+    android:id="@+id/signupLayout"
     android:focusableInTouchMode="true"
     tools:context="com.example.himanshu.crimemapping.SignupActivity">
 
@@ -14,22 +16,136 @@
         android:layout_height="50dp"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="50dp"
         android:background="@drawable/button_rounded_gmail"
         android:text="@string/start_using_google"
         android:textColor="@color/white"
         android:textSize="17sp" />
 
     <TextView
-
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp"
-        android:gravity="center"
-        android:layout_marginTop="30dp"
-        android:textSize="20sp"
-        android:textColor="@color/white"
-        android:text="@string/or"
-        android:layout_below="@+id/startWithGoogle"
+        android:id="@+id/OR"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/startWithGoogle"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="@string/or"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/emailWrapperSignup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/OR"
+        android:layout_marginTop="30dp"
+        android:hint="@string/email"
+        android:textColorHint="@color/white">
+
+        <EditText
+            android:id="@+id/emailSignup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:background="@drawable/underlinebg"
+            android:inputType="textEmailAddress"
+            android:maxLength="40"
+            android:padding="2dp"
+            android:textColor="@color/white" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/usernameWrapperSignup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/emailWrapperSignup"
+        android:layout_marginTop="30dp"
+        android:hint="@string/username"
+        android:textColorHint="@color/white">
+
+        <EditText
+            android:id="@+id/usernameSignup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:background="@drawable/underlinebg"
+            android:inputType="text"
+            android:maxLength="20"
+            android:padding="2dp"
+            android:textColor="@color/white" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+
+        android:id="@+id/passwordWrapperSignup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/usernameWrapperSignup"
+        android:layout_marginTop="20dp"
+        android:hint="@string/password"
+        android:textColorHint="@color/white"
+        app:passwordToggleEnabled = "true"
+        app:passwordToggleTint="@color/white">
+
+        <EditText
+            android:id="@+id/passwordSignup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:background="@drawable/underlinebg"
+            android:inputType="textPassword"
+            android:maxLength="15"
+            android:padding="2dp"
+            android:textColor="@color/white" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+
+        android:id="@+id/rePasswordWrapperSignup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/passwordWrapperSignup"
+        android:layout_marginTop="20dp"
+        android:hint="@string/repassword"
+        android:textColorHint="@color/white"
+        app:passwordToggleEnabled = "true"
+        app:passwordToggleTint="@color/white">
+
+        <EditText
+            android:id="@+id/rePasswordSignup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:background="@drawable/underlinebg"
+            android:inputType="textPassword"
+            android:maxLength="15"
+            android:padding="2dp"
+            android:textColor="@color/white" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/singupUser"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/rePasswordWrapperSignup"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/button_rounded"
+        android:text="@string/sign_up"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+
 </RelativeLayout>

@@ -5,9 +5,10 @@
 
     <item
         android:id="@+id/action_refresh"
-        android:icon="@drawable/ic_refresh_black_24dp"
+        android:icon="@drawable/ic_autorenew_black_24dp"
         android:orderInCategory="20"
         android:title="@string/refresh"
+        android:actionViewClass="android.widget.ImageView"
         app:showAsAction="always" />
 
     <item

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/crimeListFragment"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/list_row_selector"
+    android:padding="8dp">
+
+
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/im_crimeimage"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="8dp" />
+
+
+    <TextView
+        android:id="@+id/tv_crimeheading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/im_crimeimage"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/im_crimeimage"
+        android:textSize="17sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_crimedesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_crimeheading"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="1dip"
+        android:layout_toRightOf="@+id/im_crimeimage"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tv_crimedate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_crimedesc"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="1dip"
+        android:layout_toRightOf="@+id/im_crimeimage"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tv_crimetime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_crimedate"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="1dip"
+        android:layout_toRightOf="@+id/im_crimeimage"
+        android:textSize="12sp" />
+</RelativeLayout>

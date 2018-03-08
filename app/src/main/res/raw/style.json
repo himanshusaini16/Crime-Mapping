@@ -1,28 +1,20 @@
 [
   {
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "weight": 1.5
-      }
-    ]
-  },
-  {
-    "elementType": "geometry.fill",
-    "stylers": [
-      {
-        "weight": 2
-      }
-    ]
-  },
-  {
     "elementType": "labels",
     "stylers": [
       {
-        "saturation": 20
+        "visibility": "on"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.icon",
+    "stylers": [
+      {
+        "visibility": "on"
       },
       {
-        "weight": 2
+        "weight": 8
       }
     ]
   },
@@ -30,41 +22,27 @@
     "elementType": "labels.text",
     "stylers": [
       {
-        "weight": 2
+        "visibility": "on"
+      },
+      {
+        "weight": 3
       }
     ]
   },
   {
-    "featureType": "administrative",
-    "elementType": "geometry",
+    "elementType": "labels.text.fill",
     "stylers": [
       {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "poi",
-    "stylers": [
-      {
-        "visibility": "off"
+        "weight": 8
       }
     ]
   },
   {
     "featureType": "road",
-    "elementType": "labels.icon",
+    "elementType": "geometry.fill",
     "stylers": [
       {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "transit",
-    "stylers": [
-      {
-        "visibility": "off"
+        "weight": 5
       }
     ]
   }
