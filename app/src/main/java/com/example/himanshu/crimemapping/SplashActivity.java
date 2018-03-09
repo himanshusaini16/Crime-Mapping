@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 public class SplashActivity extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
 
-    SharedPreferences sp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,11 +30,9 @@ public class SplashActivity extends AppCompatActivity implements ConnectivityRec
 
                 } finally {
 
-                    sp=getSharedPreferences(LoginActivity.PREFS_NAME,MODE_PRIVATE);
 
-                    boolean isloggin =sp.getBoolean("login",false);
-                    if(isloggin)
-                    {
+
+                    if (!new PrefManager(SplashActivity.this).isUserLogedOut()) {
                         Intent ss=new Intent(SplashActivity.this,BottomNavigationHomeActivity.class);
                         ss.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(ss);

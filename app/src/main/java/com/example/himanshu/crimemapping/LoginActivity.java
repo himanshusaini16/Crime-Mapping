@@ -3,7 +3,6 @@ package com.example.himanshu.crimemapping;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
@@ -40,19 +39,12 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
     private AlertDialog progressDialog;
     Intent s2;
 
-    SharedPreferences sp;
-    SharedPreferences.Editor ep;
-    public static final String PREFS_NAME = "MyPrefsFile";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
-        sp=getSharedPreferences(PREFS_NAME,MODE_PRIVATE);
-        ep=sp.edit();
-        ep.apply();
 
         loginUserName = (EditText) findViewById(R.id.username);
         loginPassword = (EditText) findViewById(R.id.password);
@@ -72,6 +64,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
 
         authenticate();
 
+        saveLoginDetails(lnemail, lnpassword);
 
         RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
 
@@ -87,6 +80,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
                     s2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(s2);
                     finish();
+
                 }
 
 
@@ -136,24 +130,20 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
         boolean valid = true;
 
 
-            lnemail = loginUserName.getText().toString();
-            lnpassword = loginPassword.getText().toString();
+        lnemail = loginUserName.getText().toString();
+        lnpassword = loginPassword.getText().toString();
 
 
-        ep.putString("Key_User",lnemail);
-        ep.putString("Key_Pass",lnpassword);
-        ep.putBoolean("login",true);
-        ep.commit();
 
 
-        if (loginUserName.getText()==null&&loginPassword.getText()==null) {
+        if (loginUserName.getText() == null && loginPassword.getText() == null) {
             loginUserName.setError("enter a valid email address");
             loginPassword.setError("enter a valid password");
             valid = false;
         }
 
 
-        if (lnemail.isEmpty()) {
+        if (lnemail.isEmpty() && !lnemail.contains("@")) {
             loginUserName.setError("enter a valid email address");
             valid = false;
         } else {
@@ -171,6 +161,9 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
         return valid;
     }
 
+    private void saveLoginDetails(String email, String password) {
+        new PrefManager(this).saveLoginDetails(email, password);
+    }
 
     public void SingUpNow(View view) {
         Intent e = new Intent(LoginActivity.this, SignupActivity.class);

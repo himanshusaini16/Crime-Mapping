@@ -130,7 +130,7 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
 
         authenticate();
 
-
+        saveLoginDetails(uemail, upasswd);
         RequestQueue queue = Volley.newRequestQueue(SignupActivity.this);
 
         final String finalResponse = null;
@@ -182,6 +182,10 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
 
     }
 
+    private void saveLoginDetails(String email, String password) {
+        new PrefManager(this).saveLoginDetails(email, password);
+    }
+
     public void authenticate() {
         Log.d(TAG, "Signup");
 
@@ -209,10 +213,7 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
         upasswd = signUpPassword.getText().toString();
         urepasswd = signUpRePassword.getText().toString();
 
-        ep.putString("Key_User",uemail);
-        ep.putString("Key_Pass",upasswd);
-        ep.putBoolean("login",true);
-        ep.commit();
+
 
         if (uemail.isEmpty()) {
             signUpEmail.setError("enter a valid email address");
