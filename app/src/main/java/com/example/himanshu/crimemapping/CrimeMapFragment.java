@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
@@ -58,6 +59,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.yarolegovich.lovelydialog.LovelyInfoDialog;
+import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -149,12 +152,50 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
                 ft.detach(this).attach(this).commit();
                 break;
 
+            case R.id.about_app:
+                viewAboutApp();
+                break;
+
+            case R.id.about_us:
+                viewAboutUs();
+                break;
+
+            case R.id.Share:
+                Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                String shareBodyText = "Crime Mapping Android Application:\nCrime Mapping is useful in generating real time Crime Maps.\n\nShare it with others to help reduce the crime " +
+                        "from the society.";
+                intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Crime Mapping");
+                intent.putExtra(android.content.Intent.EXTRA_TEXT, shareBodyText);
+                startActivity(Intent.createChooser(intent, "Choose sharing method:"));
+                break;
 
 
             default:
                 return super.onOptionsItemSelected(item);
         }
         return true;
+    }
+
+    private void viewAboutUs() {
+
+        new LovelyInfoDialog(getActivity())
+                .setCancelable(true)
+                .setTopColor(R.color.black)
+                .setTitle(R.string.info_title_aboutus)
+                .setMessage(R.string.info_message_aboutus)
+
+                .show();
+    }
+
+    private void viewAboutApp() {
+        new LovelyInfoDialog(getActivity())
+                .setCancelable(true)
+                .setTopColor(R.color.black)
+                .setIcon(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.logo))
+                .setTitle(R.string.info_title)
+                .setMessage(R.string.info_message)
+                .show();
     }
 
 

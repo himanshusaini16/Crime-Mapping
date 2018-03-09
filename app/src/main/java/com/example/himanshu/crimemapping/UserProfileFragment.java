@@ -2,12 +2,17 @@ package com.example.himanshu.crimemapping;
 
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -31,11 +36,39 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
         mAdView = (AdView) v.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
-
+        setHasOptionsMenu(true);
         return v;
     }
 
+    @Override
+    public void onCreateOptionsMenu(final Menu menu, MenuInflater inflater) {
 
+        inflater.inflate(R.menu.menu_profile, menu);
+
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle item selection
+        switch (item.getItemId()) {
+            case R.id.user_logout:
+                saveLoginDetails(null, null);
+                Intent ss=new Intent(getActivity(),LoginActivity.class);
+                ss.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(ss);
+                break;
+
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
+
+    private void saveLoginDetails(String email, String password) {
+        new PrefManager(getActivity()).saveLoginDetails(email, password);
+    }
     private void showSnack(boolean isConnected) {
         String message;
         int color;
