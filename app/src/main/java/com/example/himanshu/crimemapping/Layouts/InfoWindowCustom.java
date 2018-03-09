@@ -1,4 +1,4 @@
-package com.example.himanshu.crimemapping;
+package com.example.himanshu.crimemapping.Layouts;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
+import com.example.himanshu.crimemapping.InfoWindowData;
+import com.example.himanshu.crimemapping.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Marker;
@@ -17,7 +19,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 
-class InfoWindowCustom implements GoogleMap.InfoWindowAdapter {
+public class InfoWindowCustom implements GoogleMap.InfoWindowAdapter {
 
     private Context context;
     private LayoutInflater inflater;

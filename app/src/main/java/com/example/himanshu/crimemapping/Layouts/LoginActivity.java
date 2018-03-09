@@ -1,4 +1,4 @@
-package com.example.himanshu.crimemapping;
+package com.example.himanshu.crimemapping.Layouts;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -23,6 +23,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.himanshu.crimemapping.ConnectivityReceiver;
+import com.example.himanshu.crimemapping.MyApplication;
+import com.example.himanshu.crimemapping.R;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +47,6 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
 
         loginUserName = (EditText) findViewById(R.id.username);
         loginPassword = (EditText) findViewById(R.id.password);

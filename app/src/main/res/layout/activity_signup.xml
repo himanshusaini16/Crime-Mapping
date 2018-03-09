@@ -8,7 +8,7 @@
     android:focusable="true"
     android:id="@+id/signupLayout"
     android:focusableInTouchMode="true"
-    tools:context="com.example.himanshu.crimemapping.SignupActivity">
+    tools:context="com.example.himanshu.crimemapping.Layouts.SignupActivity">
 
     <Button
         android:id="@+id/startWithGoogle"

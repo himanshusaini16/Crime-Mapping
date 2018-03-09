@@ -1,4 +1,4 @@
-package com.example.himanshu.crimemapping;
+package com.example.himanshu.crimemapping.Layouts;
 
 import android.content.Context;
 import android.content.SharedPreferences;

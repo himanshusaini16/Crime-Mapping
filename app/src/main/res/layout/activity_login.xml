@@ -9,7 +9,7 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
 
-    tools:context="com.example.himanshu.crimemapping.LoginActivity">
+    tools:context="com.example.himanshu.crimemapping.Layouts.LoginActivity">
 
 
     <TextView
@@ -39,7 +39,7 @@
             android:layout_marginRight="25dp"
             android:background="@drawable/underlinebg"
             android:hint="@string/email"
-            android:inputType="textEmailAddress"
+            android:inputType="textEmailAddress|textAutoComplete|textAutoCorrect|"
             android:maxLength="40"
             android:padding="2dp"
             android:textColor="@color/white" />

@@ -1,4 +1,4 @@
-package com.example.himanshu.crimemapping;
+package com.example.himanshu.crimemapping.Layouts;
 
 
 import android.app.AlertDialog;
@@ -28,10 +28,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.himanshu.crimemapping.CustomAdapter;
+import com.example.himanshu.crimemapping.R;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import dmax.dialog.SpotsDialog;
 
@@ -50,6 +55,8 @@ public class AddCrime extends AppCompatActivity {
     String marker_images_URL = "http://thetechnophile.000webhostapp.com/markers-images/";
     String marker_URL = "http://thetechnophile.000webhostapp.com/markers/";
 
+    private final String SENDER_ID = "535718128844";
+    private Random random = new Random();
 
     int crime_images[] = {R.drawable.icon_big_robbery, R.drawable.icon_big_moto, R.drawable.icon_big_car, R.drawable.icon_big_hijacking,
             R.drawable.icon_big_robandkill, R.drawable.icon_big_drugs
@@ -147,10 +154,34 @@ public class AddCrime extends AppCompatActivity {
     }
 
 
+    private void firebaseUpstream() {
+        FirebaseMessaging fm = FirebaseMessaging.getInstance();
+
+        RemoteMessage message = new RemoteMessage.Builder(SENDER_ID + "@gcm.googleapis.com")
+                .setMessageId(Integer.toString(random.nextInt(9999)))
+                .addData("Heading", "Crime Mapping")
+                .addData("crime_sentence", "A new Crime is Added to The Map.")
+                .addData("Crime_Type", crime_type_final)
+                .build();
+
+        if (!message.getData().isEmpty()) {
+            Log.e(TAG, "UpstreamData: " + message.getData());
+        }
+
+        if (!message.getMessageId().isEmpty()) {
+            Log.e(TAG, "UpstreamMessageId: " + message.getMessageId());
+        }
+
+        fm.send(message);
+    }
+
+
+
     private void addCrimeToDatabase() {
 
         authenticate();
 
+        firebaseUpstream();
 
         RequestQueue queue = Volley.newRequestQueue(AddCrime.this);
 
@@ -205,6 +236,7 @@ public class AddCrime extends AppCompatActivity {
         postRequest.setRetryPolicy(new DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         queue.add(postRequest);
     }
+
 
     public void authenticate() {
         Log.d(TAG, "Add Crime");

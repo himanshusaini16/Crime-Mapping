@@ -27,7 +27,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".BottomNavigationHomeActivity"
+            android:name=".Layouts.BottomNavigationHomeActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
         <!--
@@ -46,7 +46,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".SplashActivity"
+            android:name=".Layouts.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppFullScreenTheme">
             <intent-filter>
@@ -56,11 +56,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SignupActivity"
+            android:name=".Layouts.SignupActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppFullScreenTheme" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".Layouts.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppFullScreenTheme" />
 
@@ -73,9 +73,21 @@
         </receiver>
 
         <activity
-            android:name=".AddCrime"
+            android:name=".Layouts.AddCrime"
             android:label="Add Crime"
             android:screenOrientation="portrait"/>
+
+        <service android:name=".Firebase.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <service android:name=".Firebase.FirebaseIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
 
 
 

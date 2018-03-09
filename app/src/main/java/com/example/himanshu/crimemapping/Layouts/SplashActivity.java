@@ -1,9 +1,8 @@
-package com.example.himanshu.crimemapping;
+package com.example.himanshu.crimemapping.Layouts;
 
 
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
@@ -11,6 +10,10 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
+
+import com.example.himanshu.crimemapping.ConnectivityReceiver;
+import com.example.himanshu.crimemapping.MyApplication;
+import com.example.himanshu.crimemapping.R;
 
 public class SplashActivity extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
 
@@ -30,16 +33,13 @@ public class SplashActivity extends AppCompatActivity implements ConnectivityRec
 
                 } finally {
 
-
-
                     if (!new PrefManager(SplashActivity.this).isUserLogedOut()) {
-                        Intent ss=new Intent(SplashActivity.this,BottomNavigationHomeActivity.class);
+                        Intent ss = new Intent(SplashActivity.this, BottomNavigationHomeActivity.class);
                         ss.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(ss);
                         finish();
-                    }
-                    else {
-                        Intent ss=new Intent(SplashActivity.this,LoginActivity.class);
+                    } else {
+                        Intent ss = new Intent(SplashActivity.this, LoginActivity.class);
                         ss.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(ss);
                         finish();
@@ -74,16 +74,17 @@ public class SplashActivity extends AppCompatActivity implements ConnectivityRec
             message = "No Internet Connection !";
             color = Color.RED;
 
-        Snackbar snackbar = Snackbar
-                .make(findViewById(R.id.splashlayout), message, Snackbar.LENGTH_LONG);
+            Snackbar snackbar = Snackbar
+                    .make(findViewById(R.id.splashlayout), message, Snackbar.LENGTH_LONG);
 
-        View sbView = snackbar.getView();
-        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-        textView.setTextColor(color);
-        snackbar.show();
+            View sbView = snackbar.getView();
+            TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+            textView.setTextColor(color);
+            snackbar.show();
+        }
+
     }
 
-}
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
 

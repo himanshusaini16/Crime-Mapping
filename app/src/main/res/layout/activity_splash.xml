@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/splashbackground"
     android:id="@+id/splashlayout"
-    tools:context="com.example.himanshu.crimemapping.SplashActivity">
+    tools:context="com.example.himanshu.crimemapping.Layouts.SplashActivity">
 
 
     <ProgressBar

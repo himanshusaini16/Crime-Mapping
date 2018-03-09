@@ -1,4 +1,4 @@
-package com.example.himanshu.crimemapping;
+package com.example.himanshu.crimemapping.Layouts;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
@@ -25,7 +24,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -42,6 +40,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.example.himanshu.crimemapping.AppController;
+import com.example.himanshu.crimemapping.ConnectivityReceiver;
+import com.example.himanshu.crimemapping.Crime;
+import com.example.himanshu.crimemapping.InfoWindowData;
+import com.example.himanshu.crimemapping.MyApplication;
+import com.example.himanshu.crimemapping.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -60,7 +64,6 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.yarolegovich.lovelydialog.LovelyInfoDialog;
-import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -126,7 +129,7 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
         mMapView = (MapView) v.findViewById(R.id.mapView);
         if (mMapView != null) {
             mMapView.onCreate(savedInstanceState);
-            mMapView.onResume();
+            mMapView.onStart();
             mMapView.getMapAsync(this);
 
 
@@ -219,7 +222,7 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
 
         googleMap.setOnMyLocationButtonClickListener(this);
 
-        googleMap.setMyLocationEnabled(true);
+
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getActivity(), R.raw.style));
         googleMap.getUiSettings().setZoomControlsEnabled(true);
@@ -531,6 +534,7 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
 
         switch (requestCode) {
             case MY_PERMISSION_REQUEST_FINE_LOCATION:

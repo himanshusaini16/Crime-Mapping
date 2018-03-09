@@ -1,8 +1,7 @@
-package com.example.himanshu.crimemapping;
+package com.example.himanshu.crimemapping.Layouts;
 
 
 import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
@@ -17,25 +16,32 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.himanshu.crimemapping.ConnectivityReceiver;
+import com.example.himanshu.crimemapping.Layouts.LoginActivity;
+import com.example.himanshu.crimemapping.Layouts.PrefManager;
+import com.example.himanshu.crimemapping.MyApplication;
+import com.example.himanshu.crimemapping.R;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.firebase.auth.FirebaseAuth;
 
 
 public class UserProfileFragment extends Fragment implements ConnectivityReceiver.ConnectivityReceiverListener {
 
     AdView mAdView;
     View v;
-
+    FirebaseAuth mAuth;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_user_profile, container, false);
 
-
+        mAuth = FirebaseAuth.getInstance();
         mAdView = (AdView) v.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+
         setHasOptionsMenu(true);
         return v;
     }
@@ -48,6 +54,8 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
     }
 
 
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle item selection
@@ -57,6 +65,7 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
                 Intent ss=new Intent(getActivity(),LoginActivity.class);
                 ss.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(ss);
+
                 break;
 
 

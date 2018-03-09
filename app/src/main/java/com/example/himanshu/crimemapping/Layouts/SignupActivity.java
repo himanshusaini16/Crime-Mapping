@@ -1,4 +1,4 @@
-package com.example.himanshu.crimemapping;
+package com.example.himanshu.crimemapping.Layouts;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -25,10 +25,16 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.himanshu.crimemapping.ConnectivityReceiver;
+import com.example.himanshu.crimemapping.MyApplication;
+import com.example.himanshu.crimemapping.R;
+import com.example.himanshu.crimemapping.UserData;
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -37,6 +43,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,10 +62,14 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
     private static final int RC_SIGN_IN = 234;
     private static final String TAG2 = "crimemapping";
     GoogleSignInClient mGoogleSignInClient;
-    FirebaseAuth mAuth;
+
 
     private AlertDialog progressDialog;
     Intent s1;
+    FirebaseAuth mAuth;
+
+    GoogleSignInAccount account11;
+    DatabaseReference mDatabase;
 
     SharedPreferences sp;
     SharedPreferences.Editor ep;
@@ -70,7 +82,12 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
         mAuth = FirebaseAuth.getInstance();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        mDatabase = database.getReference("UserDetails");
+
 
 
         sp=getSharedPreferences(PREFS_NAME,MODE_PRIVATE);
@@ -113,6 +130,7 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
 
         //starting the activity for result
         startActivityForResult(signInIntent, RC_SIGN_IN);
+
     }
 
 
@@ -120,10 +138,6 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
     protected void onStart() {
         super.onStart();
 
-        if (mAuth.getCurrentUser() != null) {
-            finish();
-            startActivity(new Intent(this, BottomNavigationHomeActivity.class));
-        }
     }
 
     private void signupRequest() {
@@ -131,6 +145,15 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
         authenticate();
 
         saveLoginDetails(uemail, upasswd);
+
+        String id = mDatabase.push().getKey();
+
+        UserData ud = new UserData(id, uemail, upasswd);
+
+        //Saving the Artist
+        mDatabase.child(id).setValue(ud);
+
+
         RequestQueue queue = Volley.newRequestQueue(SignupActivity.this);
 
         final String finalResponse = null;
@@ -182,9 +205,12 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
 
     }
 
+
+
     private void saveLoginDetails(String email, String password) {
         new PrefManager(this).saveLoginDetails(email, password);
     }
+
 
     public void authenticate() {
         Log.d(TAG, "Signup");
@@ -212,6 +238,7 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
         uname = signUpUserName.getText().toString();
         upasswd = signUpPassword.getText().toString();
         urepasswd = signUpRePassword.getText().toString();
+
 
 
 
@@ -293,6 +320,14 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
             try {
                 //Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
+                GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+                account11 = result.getSignInAccount();
+
+                String aa=account11.getEmail();
+                String bb=account11.getDisplayName();
+                saveLoginDetails(aa,bb);
+
+
 
                 //authenticating with firebase
                 firebaseAuthWithGoogle(account);
@@ -317,7 +352,14 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
                             Log.d(TAG2, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            Toast.makeText(SignupActivity.this, "User Signed In", Toast.LENGTH_SHORT).show();
+
+
+                            s1 = new Intent(SignupActivity.this, BottomNavigationHomeActivity.class);
+                            s1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(s1);
+
+
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG2, "signInWithCredential:failure", task.getException());
@@ -326,7 +368,7 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
 
                         }
 
-                        // ...
+
                     }
                 });
     }

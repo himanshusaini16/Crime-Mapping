@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.himanshu.crimemapping.BottomNavigationHomeActivity">
+    tools:context="com.example.himanshu.crimemapping.Layouts.BottomNavigationHomeActivity">
 
     <FrameLayout
         android:id="@+id/rootLayout"
