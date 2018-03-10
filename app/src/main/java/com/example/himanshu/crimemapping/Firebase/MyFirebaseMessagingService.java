@@ -19,6 +19,16 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Log.d(TAG, "From: " + remoteMessage.getFrom());
         Log.d(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
+
+        if(remoteMessage.getData().size() > 0){
+            //handle the data message here
+        }
+
+        //getting the title and the body
+        String title = remoteMessage.getNotification().getTitle();
+        String body = remoteMessage.getNotification().getBody();
+
+        //then here we can use the title and body to build a notification
         super.onMessageReceived(remoteMessage);
     }
 

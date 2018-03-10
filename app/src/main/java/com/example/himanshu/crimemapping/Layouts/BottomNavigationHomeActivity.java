@@ -26,8 +26,6 @@ public class BottomNavigationHomeActivity extends AppCompatActivity {
 
         MobileAds.initialize(this, "ca-app-pub-4510895115386086~4521143649");
 
-
-
         setupNavigationView();
 
 
