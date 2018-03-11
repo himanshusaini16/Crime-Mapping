@@ -40,7 +40,7 @@ import java.util.Random;
 
 import dmax.dialog.SpotsDialog;
 
-public class AddCrime extends AppCompatActivity {
+public class AddCrime extends AppCompatActivity  {
     public static final int REQUEST_CODE_AddCrime = 100;
     private Double lat, lng;
     private String crime_latitude_final, crime_longitude_final, crime_marker_final, crime_images_marker_final;
@@ -147,6 +147,7 @@ public class AddCrime extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_addcrime) {
+            authenticate();
             addCrimeToDatabase();
             return true;
         }
@@ -179,7 +180,7 @@ public class AddCrime extends AppCompatActivity {
 
     private void addCrimeToDatabase() {
 
-        authenticate();
+
 
         firebaseUpstream();
 
@@ -263,8 +264,21 @@ public class AddCrime extends AppCompatActivity {
 
         crime_description_final = cr_des.getText().toString();
 
+        if (crime_description_final.length()==0 ) {
+            Toast.makeText(AddCrime.this, "enter valid details", Toast.LENGTH_LONG).show();
+            valid = false;
+        }
+        if (crime_date_final.length()==0 ) {
+            Toast.makeText(AddCrime.this, "enter valid details", Toast.LENGTH_LONG).show();
+            valid = false;
+        }
 
-        if (crime_description_final.isEmpty() && crime_date_final.isEmpty() && crime_time_final.isEmpty()) {
+        if (crime_time_final.length()==0) {
+            Toast.makeText(AddCrime.this, "enter valid details", Toast.LENGTH_LONG).show();
+            valid = false;
+        }
+
+        if (crime_description_final.length()==0 && crime_date_final.length()==0 && crime_time_final.length()==0) {
             Toast.makeText(AddCrime.this, "enter valid details", Toast.LENGTH_LONG).show();
             valid = false;
         }
@@ -278,7 +292,7 @@ public class AddCrime extends AppCompatActivity {
         int mYear = c.get(Calendar.YEAR);
         int mMonth = c.get(Calendar.MONTH);
         int mDay = c.get(Calendar.DAY_OF_MONTH);
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.datepicker,
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT,
                 new DatePickerDialog.OnDateSetListener() {
 
 
@@ -289,6 +303,7 @@ public class AddCrime extends AppCompatActivity {
                         crime_date_final = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
                     }
                 }, mYear, mMonth, mDay);
+
         datePickerDialog.setCancelable(false);
         datePickerDialog.setTitle("Select the date:");
         datePickerDialog.show();
@@ -299,7 +314,7 @@ public class AddCrime extends AppCompatActivity {
         final Calendar c = Calendar.getInstance();
         int mHour = c.get(Calendar.HOUR_OF_DAY);
         int mMinute = c.get(Calendar.MINUTE);
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this,
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT,
                 new TimePickerDialog.OnTimeSetListener() {
 
                     @Override

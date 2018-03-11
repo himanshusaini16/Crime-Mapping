@@ -89,7 +89,7 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
     MapView mMapView;
     GoogleMap mMap;
     LocationManager locationManager;
-    boolean GpsStatus;
+    boolean GpsStatus=true;
     private Location mylocation = null;
     private GoogleApiClient googleApiClient;
     double latitude, longitude;
@@ -129,7 +129,7 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
         mMapView = (MapView) v.findViewById(R.id.mapView);
         if (mMapView != null) {
             mMapView.onCreate(savedInstanceState);
-            mMapView.onStart();
+            mMapView.onResume();
             mMapView.getMapAsync(this);
 
 
@@ -222,7 +222,6 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
 
         googleMap.setOnMyLocationButtonClickListener(this);
 
-
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getActivity(), R.raw.style));
         googleMap.getUiSettings().setZoomControlsEnabled(true);
@@ -309,36 +308,52 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
                         markerOptions.position(ppos);
                         markerOptions.draggable(false);
 
-                        if (myurl.equals("Robbery")) {
-                            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_small_assault));
-                        } else if (myurl.equals("Bikers gang robbery")) {
-                            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_small_moto));
-                        } else if (myurl.equals("Motor Vehicle Theft")) {
-                            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_small_car));
-                        } else if (myurl.equals("Hijacking")) {
-                            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_small_hijacking));
-                        } else if (myurl.equals("Robbery and killing")) {
-                            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_small_robandkill));
-                        } else if (myurl.equals("Drug Addicts")) {
-                            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_small_drugs));
-                        } else if (myurl.equals("Garbage")) {
-                            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_small_garbage));
-                        } else if (myurl.equals("Robbery at ATM")) {
-                            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_small_bank));
-                        } else if (myurl.equals("Homicide")) {
-                            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_small_homicide));
-                        } else if (myurl.equals("Loud Sound")) {
-                            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_small_loudsound));
-                        } else if (myurl.equals("Sexual violence")) {
-                            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_small_sex));
-                        } else if (myurl.equals("Vandalism")) {
-                            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_small_vandalism));
-                        } else if (myurl.equals("Police Station")) {
-                            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_small_police));
-                        } else if (myurl.equals("Crime Against Animals")) {
-                            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_small_animal));
-                        } else if (myurl.equals("Dangerous place")) {
-                            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_small_dangerous));
+                        switch (myurl) {
+                            case "Robbery":
+                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_small_assault));
+                                break;
+                            case "Bikers gang robbery":
+                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_small_moto));
+                                break;
+                            case "Motor Vehicle Theft":
+                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_small_car));
+                                break;
+                            case "Hijacking":
+                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_small_hijacking));
+                                break;
+                            case "Robbery and killing":
+                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_small_robandkill));
+                                break;
+                            case "Drug Addicts":
+                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_small_drugs));
+                                break;
+                            case "Garbage":
+                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_small_garbage));
+                                break;
+                            case "Robbery at ATM":
+                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_small_bank));
+                                break;
+                            case "Homicide":
+                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_small_homicide));
+                                break;
+                            case "Loud Sound":
+                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_small_loudsound));
+                                break;
+                            case "Sexual violence":
+                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_small_sex));
+                                break;
+                            case "Vandalism":
+                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_small_vandalism));
+                                break;
+                            case "Police Station":
+                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_small_police));
+                                break;
+                            case "Crime Against Animals":
+                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_small_animal));
+                                break;
+                            case "Dangerous place":
+                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_small_dangerous));
+                                break;
                         }
 
                         mMap.setInfoWindowAdapter(new InfoWindowCustom(getContext()));
@@ -584,6 +599,7 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
             Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             startActivity(i);
         }
+
         return false;
     }
 

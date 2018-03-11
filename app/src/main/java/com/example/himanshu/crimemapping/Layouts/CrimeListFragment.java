@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -77,6 +78,18 @@ public class CrimeListFragment extends Fragment implements ConnectivityReceiver.
         listView = (ListView)v.findViewById(R.id.lv_crime);
         adapter = new CustomListAdapter(getActivity(), crimeList);
         listView.setAdapter(adapter);
+
+        listView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
 
         progressDialog = new SpotsDialog(getActivity(), R.style.Custom3);
