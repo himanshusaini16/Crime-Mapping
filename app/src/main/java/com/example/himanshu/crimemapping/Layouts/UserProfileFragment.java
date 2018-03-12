@@ -1,12 +1,14 @@
 package com.example.himanshu.crimemapping.Layouts;
 
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,6 +33,8 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
     AdView mAdView;
     View v;
     FirebaseAuth mAuth;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -38,7 +42,8 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
         v = inflater.inflate(R.layout.fragment_user_profile, container, false);
 
         mAuth = FirebaseAuth.getInstance();
-        mAdView = (AdView) v.findViewById(R.id.adView);
+
+        mAdView = v.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
@@ -109,5 +114,9 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
         showSnack(isConnected);
+    }
+
+
+    public void changeProfilePicture(View view) {
     }
 }

@@ -78,7 +78,7 @@ public class BottomNavigationHomeActivity extends AppCompatActivity {
 
             case R.id.navigation_profile:
                 pushFragment(new UserProfileFragment());
-                getSupportActionBar().setTitle("User Profile");
+                getSupportActionBar().setTitle("Profile");
                 break;
 
         }

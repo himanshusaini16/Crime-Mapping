@@ -42,7 +42,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_crimedesc"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="1dip"
         android:layout_toRightOf="@+id/im_crimeimage"
         android:textSize="12sp" />
 
