@@ -56,6 +56,7 @@ public class CustomListAdapter extends BaseAdapter {
         TextView desc = (TextView) convertView.findViewById(R.id.tv_crimedesc);
         TextView date = (TextView) convertView.findViewById(R.id.tv_crimedate);
         TextView time = (TextView) convertView.findViewById(R.id.tv_crimetime);
+        TextView addr = (TextView) convertView.findViewById(R.id.tv_crimeaddress);
 
         // getting movie data for the row
         Crime m = crimeItems.get(position);
@@ -68,6 +69,7 @@ public class CustomListAdapter extends BaseAdapter {
         desc.setText(m.getDes());
         date.setText("Date: "+m.getDate());
         time.setText("Time: "+m.getTime());
+        addr.setText("Location: " + m.getAddress());
 
 
 

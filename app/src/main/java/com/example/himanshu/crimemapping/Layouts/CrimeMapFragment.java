@@ -89,13 +89,14 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
     MapView mMapView;
     GoogleMap mMap;
     LocationManager locationManager;
-    boolean GpsStatus=true;
+    boolean GpsStatus = true;
     private Location mylocation = null;
     private GoogleApiClient googleApiClient;
     double latitude, longitude;
     LocationRequest mLocationRequest;
     Marker mCurrLocationMarker;
     LatLng latLngLoc, mClickPos;
+    String lataaya = "", lngaaya = "";
 
 
     private static final String url = "http://thetechnophile.000webhostapp.com/load_crime.json";
@@ -112,7 +113,6 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
 
         String link = "http://thetechnophile.000webhostapp.com/load_crime.php";
         new updateData().execute(link);
-
 
         setHasOptionsMenu(true);
         return v;
@@ -131,8 +131,6 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
             mMapView.onCreate(savedInstanceState);
             mMapView.onResume();
             mMapView.getMapAsync(this);
-
-
         }
 
 
@@ -145,6 +143,14 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
 
     }
 
+
+   /* public void recieveData(String m1, String m2){
+        LatLng lt = new LatLng(Double.parseDouble(m1), Double.parseDouble(m2));
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(lt));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -207,6 +213,7 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
 
         MapsInitializer.initialize(getActivity());
         mMap = googleMap;
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -282,6 +289,7 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
                 startActivityForResult(ed, 100);
             }
         });
+
     }
 
     public void loadMarkersOnMap() {

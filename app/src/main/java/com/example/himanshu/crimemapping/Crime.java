@@ -2,12 +2,12 @@ package com.example.himanshu.crimemapping;
 
 
 public class Crime {
-    private String type, thumbnailUrl,descrip,date,time,lat2,lng2;
+    private String type, thumbnailUrl, descrip, date, time, lat2, lng2, address;
 
     public Crime() {
     }
 
-    public Crime(String type1, String thumbnailUrl1,String descrip1, String date1, String time1, String latt, String lngg) {
+    public Crime(String type1, String thumbnailUrl1, String descrip1, String date1, String time1, String latt, String lngg, String address1) {
         this.type = type1;
         this.thumbnailUrl = thumbnailUrl1;
         this.descrip = descrip1;
@@ -15,6 +15,7 @@ public class Crime {
         this.time = time1;
         this.lat2=latt;
         this.lng2=lngg;
+        this.address = address1;
     }
 
     public String getTitle() {
@@ -71,6 +72,14 @@ public class Crime {
 
     public void setLng(String lngg) {
         this.lng2 = lngg;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address1) {
+        this.address = address1;
     }
 
 

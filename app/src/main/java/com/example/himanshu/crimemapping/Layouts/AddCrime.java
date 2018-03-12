@@ -1,12 +1,15 @@
 package com.example.himanshu.crimemapping.Layouts;
 
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.content.IntentCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -29,6 +32,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.himanshu.crimemapping.CustomAdapter;
+import com.example.himanshu.crimemapping.LocationAddress;
 import com.example.himanshu.crimemapping.R;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.RemoteMessage;
@@ -43,7 +47,7 @@ import dmax.dialog.SpotsDialog;
 public class AddCrime extends AppCompatActivity  {
     public static final int REQUEST_CODE_AddCrime = 100;
     private Double lat, lng;
-    private String crime_latitude_final, crime_longitude_final, crime_marker_final, crime_images_marker_final;
+    private String crime_latitude_final, crime_longitude_final, crime_marker_final, crime_images_marker_final, crime_location_address_final;
     static EditText Date, Time;
     EditText cr_des;
     String format, cmmm = ".png";
@@ -86,6 +90,9 @@ public class AddCrime extends AppCompatActivity  {
 
         crime_latitude_final = intent2.getStringExtra("lat");
         crime_longitude_final = intent2.getStringExtra("lng");
+        LocationAddress locationAddress = new LocationAddress();
+        LocationAddress.getAddressFromLocation(Double.parseDouble(crime_latitude_final), Double.parseDouble(crime_longitude_final),
+                getApplicationContext(), new GeocoderHandler());
 
 
         Date = (EditText) findViewById(R.id.EditDateCrime);
@@ -180,8 +187,6 @@ public class AddCrime extends AppCompatActivity  {
 
     private void addCrimeToDatabase() {
 
-
-
         firebaseUpstream();
 
         RequestQueue queue = Volley.newRequestQueue(AddCrime.this);
@@ -230,6 +235,7 @@ public class AddCrime extends AppCompatActivity  {
                 params.put("crime_time", crime_time_final);
                 params.put("crime_latitude", crime_latitude_final);
                 params.put("crime_longitude", crime_longitude_final);
+                params.put("crime_location_address", crime_location_address_final);
 
                 return params;
             }
@@ -349,6 +355,24 @@ public class AddCrime extends AppCompatActivity  {
         timePickerDialog.setCancelable(false);
         timePickerDialog.setTitle("Select the time:");
         timePickerDialog.show();
+    }
+
+
+    @SuppressLint("HandlerLeak")
+    private class GeocoderHandler extends Handler {
+        @Override
+        public void handleMessage(Message message) {
+            String locationAddress;
+            switch (message.what) {
+                case 1:
+                    Bundle bundle = message.getData();
+                    locationAddress = bundle.getString("address");
+                    break;
+                default:
+                    locationAddress = null;
+            }
+            crime_location_address_final = locationAddress;
+        }
     }
 
 }

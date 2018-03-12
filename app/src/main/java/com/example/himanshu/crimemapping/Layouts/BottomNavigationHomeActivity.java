@@ -31,7 +31,13 @@ public class BottomNavigationHomeActivity extends AppCompatActivity {
 
     }
 
+  /*  @Override
+    public void sendData(String m1, String m2) {
+        FragmentManager fm = getFragmentManager();
+        CrimeMapFragment frag = (CrimeMapFragment) fm.findFragmentById(R.id.crimeMapFragment);
 
+        frag.recieveData(m1,m2);
+    }*/
 
 
     private void setupNavigationView() {

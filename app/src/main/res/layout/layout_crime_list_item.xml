@@ -11,15 +11,16 @@
         android:id="@+id/im_crimeimage"
         android:layout_width="80dp"
         android:layout_height="80dp"
+        android:layout_marginTop="5dp"
         android:layout_alignParentLeft="true"
         android:layout_marginRight="8dp" />
 
 
     <TextView
+        android:textColor="@color/black"
         android:id="@+id/tv_crimeheading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/im_crimeimage"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/im_crimeimage"
         android:textSize="17sp"
@@ -32,7 +33,6 @@
         android:layout_below="@+id/tv_crimeheading"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="5dp"
-        android:layout_marginTop="1dip"
         android:layout_toRightOf="@+id/im_crimeimage"
         android:textSize="14sp" />
 
@@ -51,6 +51,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_crimedate"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="1dip"
+        android:layout_toRightOf="@+id/im_crimeimage"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tv_crimeaddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_crimetime"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="1dip"
         android:layout_toRightOf="@+id/im_crimeimage"

@@ -2,11 +2,11 @@ package com.example.himanshu.crimemapping.Layouts;
 
 
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -43,24 +43,26 @@ public class CrimeListFragment extends Fragment implements ConnectivityReceiver.
 
     View v;
 
+    //    Communicate cm;
     private static final String TAG = CrimeListFragment.class.getSimpleName();
-
-    // Movies json url
     private static final String url = "http://thetechnophile.000webhostapp.com/load_crime.json";
     private AlertDialog progressDialog;
-    private List<Crime> crimeList = new ArrayList<Crime>();
+    private List<Crime> crimeList = new ArrayList<>();
     private ListView listView;
     private CustomListAdapter adapter;
     SwipeRefreshLayout mSwipeRefreshLayout;
+    String latHai, lngHai;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        v= inflater.inflate(R.layout.fragment_crime_list, container, false);
+        v = inflater.inflate(R.layout.fragment_crime_list, container, false);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipeToRefresh);
+//        cm = (Communicate) getActivity();
+
+        mSwipeRefreshLayout = v.findViewById(R.id.swipeToRefresh);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorApplication);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -75,18 +77,18 @@ public class CrimeListFragment extends Fragment implements ConnectivityReceiver.
             }
         });
 
-        listView = (ListView)v.findViewById(R.id.lv_crime);
+        listView = v.findViewById(R.id.lv_crime);
         adapter = new CustomListAdapter(getActivity(), crimeList);
         listView.setAdapter(adapter);
 
-        listView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Crime ss = (Crime) listView.getItemAtPosition(position);
 
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                latHai = ss.getLat();
+                lngHai = ss.getLng();
+//                cm.sendData(latHai, lngHai);
 
             }
         });
@@ -105,7 +107,7 @@ public class CrimeListFragment extends Fragment implements ConnectivityReceiver.
                         progressDialog.hide();
 
                         // Parsing json
-                        for (int i = response.length(); i >=0; i--) {
+                        for (int i = response.length(); i >= 0; i--) {
                             try {
 
                                 JSONObject obj = response.getJSONObject(i);
@@ -117,9 +119,9 @@ public class CrimeListFragment extends Fragment implements ConnectivityReceiver.
                                 movie.setTime(obj.getString("crime_time"));
                                 movie.setLat(obj.getString("crime_latitude"));
                                 movie.setLng(obj.getString("crime_longitude"));
+                                movie.setAddress(obj.getString("crime_location_address"));
                                 // adding movie to movies arraymovie.setTime(obj.getString("crime_time"));
                                 crimeList.add(movie);
-
 
 
                             } catch (JSONException e) {
@@ -162,14 +164,14 @@ public class CrimeListFragment extends Fragment implements ConnectivityReceiver.
             message = "No Internet Connection !";
             color = Color.RED;
 
-
             Snackbar snackbar = Snackbar.make(v.findViewById(R.id.crimeListFragment), message, Snackbar.LENGTH_LONG);
 
             View sbView = snackbar.getView();
-            TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+            TextView textView = sbView.findViewById(android.support.design.R.id.snackbar_text);
             textView.setTextColor(color);
             snackbar.show();
-        } }
+        }
+    }
 
     @Override
     public void onDestroy() {
@@ -194,4 +196,6 @@ public class CrimeListFragment extends Fragment implements ConnectivityReceiver.
     public void onNetworkConnectionChanged(boolean isConnected) {
         showSnack(isConnected);
     }
+
+
 }
