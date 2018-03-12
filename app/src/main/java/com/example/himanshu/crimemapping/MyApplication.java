@@ -1,13 +1,10 @@
 package com.example.himanshu.crimemapping;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
-import android.os.AsyncTask;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 
+@SuppressLint("Registered")
 public class MyApplication extends Application {
 
     private static MyApplication mInstance;
@@ -15,7 +12,6 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
 
 
         mInstance = this;

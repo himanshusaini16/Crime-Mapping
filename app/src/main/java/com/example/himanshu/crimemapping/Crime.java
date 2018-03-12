@@ -26,7 +26,7 @@ public class Crime {
         this.type = type1;
     }
 
-    public String getThumbnailUrl() {
+    String getThumbnailUrl() {
         return thumbnailUrl;
     }
 
@@ -34,7 +34,7 @@ public class Crime {
         this.thumbnailUrl = thumbnailUrl1;
     }
 
-    public String getDes() {
+    String getDes() {
         return descrip;
     }
 
@@ -42,7 +42,7 @@ public class Crime {
         this.descrip = descrip1;
     }
 
-    public String getDate() {
+    String getDate() {
         return date;
     }
 
@@ -74,7 +74,7 @@ public class Crime {
         this.lng2 = lngg;
     }
 
-    public String getAddress() {
+    String getAddress() {
         return address;
     }
 

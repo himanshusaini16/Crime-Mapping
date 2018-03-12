@@ -18,7 +18,7 @@ public class CustomListAdapter extends BaseAdapter {
     private Activity activity;
     private LayoutInflater inflater;
     private List<Crime> crimeItems;
-    ImageLoader imageLoader = AppController.getInstance().getImageLoader();
+    private ImageLoader imageLoader = AppController.getInstance().getImageLoader();
 
     public CustomListAdapter(Activity activity, List<Crime> crimeItems) {
         this.activity = activity;
@@ -51,12 +51,12 @@ public class CustomListAdapter extends BaseAdapter {
 
         if (imageLoader == null)
             imageLoader = AppController.getInstance().getImageLoader();
-        NetworkImageView thumbNail = (NetworkImageView) convertView.findViewById(R.id.im_crimeimage);
-        TextView heading = (TextView) convertView.findViewById(R.id.tv_crimeheading);
-        TextView desc = (TextView) convertView.findViewById(R.id.tv_crimedesc);
-        TextView date = (TextView) convertView.findViewById(R.id.tv_crimedate);
-        TextView time = (TextView) convertView.findViewById(R.id.tv_crimetime);
-        TextView addr = (TextView) convertView.findViewById(R.id.tv_crimeaddress);
+        NetworkImageView thumbNail = convertView.findViewById(R.id.im_crimeimage);
+        TextView heading = convertView.findViewById(R.id.tv_crimeheading);
+        TextView desc = convertView.findViewById(R.id.tv_crimedesc);
+        TextView date = convertView.findViewById(R.id.tv_crimedate);
+        TextView time = convertView.findViewById(R.id.tv_crimetime);
+        TextView addr = convertView.findViewById(R.id.tv_crimeaddress);
 
         // getting movie data for the row
         Crime m = crimeItems.get(position);

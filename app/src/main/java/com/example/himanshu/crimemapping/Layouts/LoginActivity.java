@@ -7,14 +7,12 @@ import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.IntentCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -48,9 +46,9 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        loginUserName = (EditText) findViewById(R.id.username);
-        loginPassword = (EditText) findViewById(R.id.password);
-        loginButton = (Button) findViewById(R.id.loginUser);
+        loginUserName = findViewById(R.id.username);
+        loginPassword = findViewById(R.id.password);
+        loginButton = findViewById(R.id.loginUser);
 
 
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -79,7 +77,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
                 if (response.equals("Login")) {
                     progressDialog.hide();
                     s2 = new Intent(LoginActivity.this, BottomNavigationHomeActivity.class);
-                    s2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                    s2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(s2);
                     finish();
 
@@ -124,7 +122,12 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
     }
 
     public void onAuthFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        Snackbar snackbar = Snackbar.make(findViewById(R.id.loginLayout), "Error Occured", Snackbar.LENGTH_LONG);
+
+        View sbView = snackbar.getView();
+        TextView textView = sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(getResources().getColor(R.color.white));
+        snackbar.show();
 
     }
 
@@ -186,7 +189,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
             Snackbar snackbar = Snackbar.make(findViewById(R.id.loginLayout), message, Snackbar.LENGTH_LONG);
 
             View sbView = snackbar.getView();
-            TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+            TextView textView = sbView.findViewById(android.support.design.R.id.snackbar_text);
             textView.setTextColor(color);
             snackbar.show();
         }

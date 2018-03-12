@@ -9,7 +9,6 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.IntentCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -41,7 +40,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -102,12 +100,12 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
 
-        signupWithGoogle = (Button) findViewById(R.id.startWithGoogle);
-        signUpButton = (Button) findViewById(R.id.singupUser);
-        signUpEmail = (EditText) findViewById(R.id.emailSignup);
-        signUpUserName = (EditText) findViewById(R.id.usernameSignup);
-        signUpPassword = (EditText) findViewById(R.id.passwordSignup);
-        signUpRePassword = (EditText) findViewById(R.id.rePasswordSignup);
+        signupWithGoogle = findViewById(R.id.startWithGoogle);
+        signUpButton = findViewById(R.id.singupUser);
+        signUpEmail = findViewById(R.id.emailSignup);
+        signUpUserName = findViewById(R.id.usernameSignup);
+        signUpPassword = findViewById(R.id.passwordSignup);
+        signUpRePassword = findViewById(R.id.rePasswordSignup);
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,7 +168,7 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
                 if (response.equals("Successfully Signed In")) {
                     progressDialog.hide();
                     s1 = new Intent(SignupActivity.this, BottomNavigationHomeActivity.class);
-                    s1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                    s1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(s1);
                     finish();
 
@@ -226,7 +224,12 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
     }
 
     public void onAuthFailed() {
-        Toast.makeText(getBaseContext(), "Signup failed", Toast.LENGTH_LONG).show();
+        Snackbar snackbar = Snackbar.make(findViewById(R.id.signupLayout), "Error Occured", Snackbar.LENGTH_LONG);
+
+        View sbView = snackbar.getView();
+        TextView textView = sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(getResources().getColor(R.color.white));
+        snackbar.show();
 
     }
 
@@ -284,7 +287,7 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
             Snackbar snackbar = Snackbar.make(findViewById(R.id.signupLayout), message, Snackbar.LENGTH_LONG);
 
             View sbView = snackbar.getView();
-            TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+            TextView textView = sbView.findViewById(android.support.design.R.id.snackbar_text);
             textView.setTextColor(color);
             snackbar.show();
         }
@@ -350,12 +353,9 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Log.d(TAG2, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-
-
 
                             s1 = new Intent(SignupActivity.this, BottomNavigationHomeActivity.class);
-                            s1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                            s1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(s1);
 
 

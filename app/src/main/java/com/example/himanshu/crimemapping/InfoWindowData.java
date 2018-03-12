@@ -7,7 +7,6 @@ public class InfoWindowData {
     private String description_info;
     private String date_info;
     private String time_info;
-    private String thumbnailUrl;
 
 
     public String getHeading() {

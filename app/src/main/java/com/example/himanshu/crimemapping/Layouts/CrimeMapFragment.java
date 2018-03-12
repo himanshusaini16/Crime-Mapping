@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,6 +12,8 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
@@ -24,6 +27,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,7 +35,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,13 +67,10 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.yarolegovich.lovelydialog.LovelyInfoDialog;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -80,23 +80,19 @@ import static android.content.ContentValues.TAG;
 
 
 public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, LocationListener, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMyLocationButtonClickListener, ConnectivityReceiver.ConnectivityReceiverListener,
-        SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
+        GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMyLocationButtonClickListener, ConnectivityReceiver.ConnectivityReceiverListener {
 
     private static final int MY_PERMISSION_REQUEST_FINE_LOCATION = 101;
 
     View v;
     MapView mMapView;
     GoogleMap mMap;
-    LocationManager locationManager;
     boolean GpsStatus = true;
-    private Location mylocation = null;
     private GoogleApiClient googleApiClient;
-    double latitude, longitude;
     LocationRequest mLocationRequest;
     Marker mCurrLocationMarker;
     LatLng latLngLoc, mClickPos;
-    String lataaya = "", lngaaya = "";
+    String place_searched;
 
 
     private static final String url = "http://thetechnophile.000webhostapp.com/load_crime.json";
@@ -107,17 +103,17 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         v = inflater.inflate(R.layout.fragment_crime_map, container, false);
 
 
         String link = "http://thetechnophile.000webhostapp.com/load_crime.php";
         new updateData().execute(link);
 
+
         setHasOptionsMenu(true);
         return v;
     }
-
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -126,7 +122,7 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
         if (!isGooglePlayServicesAvailable()) {
             getActivity().getFragmentManager().popBackStack();
         }
-        mMapView = (MapView) v.findViewById(R.id.mapView);
+        mMapView = v.findViewById(R.id.mapView);
         if (mMapView != null) {
             mMapView.onCreate(savedInstanceState);
             mMapView.onResume();
@@ -141,16 +137,71 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
 
         inflater.inflate(R.menu.menu_item, menu);
 
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        final MenuItem searchMenuItem = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) searchMenuItem.getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                place_searched = query;
+                onMapSearch();
+                if (searchMenuItem != null) {
+                    searchMenuItem.collapseActionView();
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                return false;
+            }
+        });
+
+        searchMenuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                CrimeMapFragment.this.setItemsVisibility(menu, searchMenuItem, false);
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                CrimeMapFragment.this.setItemsVisibility(menu, searchMenuItem, true);
+                return true;
+            }
+        });
     }
 
+    public void onMapSearch() {
 
-   /* public void recieveData(String m1, String m2){
-        LatLng lt = new LatLng(Double.parseDouble(m1), Double.parseDouble(m2));
+        List<Address> addressList = null;
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(lt));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+        if (place_searched != null || !place_searched.equals("")) {
+            Geocoder geocoder = new Geocoder(getActivity());
+            try {
+                addressList = geocoder.getFromLocationName(place_searched, 1);
 
-    }*/
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Address address = addressList.get(0);
+            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+            mMap.addMarker(new MarkerOptions().position(latLng).title("Searched Location"));
+            mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+        }
+    }
+
+    private void setItemsVisibility(final Menu menu, final MenuItem exception, final boolean visible) {
+        for (int i = 0; i < menu.size(); ++i) {
+            MenuItem item = menu.getItem(i);
+            if (item != exception)
+                item.setVisible(visible);
+        }
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -190,7 +241,7 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
 
         new LovelyInfoDialog(getActivity())
                 .setCancelable(true)
-                .setTopColor(R.color.black)
+                .setTopColorRes(R.color.black)
                 .setTitle(R.string.info_title_aboutus)
                 .setMessage(R.string.info_message_aboutus)
 
@@ -200,12 +251,13 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
     private void viewAboutApp() {
         new LovelyInfoDialog(getActivity())
                 .setCancelable(true)
-                .setTopColor(R.color.black)
-                .setIcon(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.logo))
+                .setTopColorRes(R.color.black)
+                .setIcon(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.icon_for_aboutus))
                 .setTitle(R.string.info_title)
                 .setMessage(R.string.info_message)
                 .show();
     }
+
 
 
     @Override
@@ -411,9 +463,9 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
                 url = new URL(params[0]);
                 conn = (HttpURLConnection) url.openConnection();
                 if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    InputStream is = conn.getInputStream();
+                    conn.getInputStream();
                 } else {
-                    InputStream err = conn.getErrorStream();
+                    conn.getErrorStream();
                 }
                 return "Done";
             } catch (IOException e) {
@@ -508,7 +560,7 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
 
     @Override
     public void onLocationChanged(Location location) {
-        mylocation = location;
+
 
         if (mCurrLocationMarker != null) {
             mCurrLocationMarker.remove();
@@ -628,7 +680,7 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
             Snackbar snackbar = Snackbar.make(v.findViewById(R.id.crimeMapFragment), message, Snackbar.LENGTH_LONG);
 
             View sbView = snackbar.getView();
-            TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+            TextView textView = sbView.findViewById(android.support.design.R.id.snackbar_text);
             textView.setTextColor(color);
             snackbar.show();
         }
@@ -640,24 +692,6 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
         showSnack(isConnected);
     }
 
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
 
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        return false;
-    }
-
-    @Override
-    public boolean onMenuItemActionExpand(MenuItem item) {
-        return false;
-    }
-
-    @Override
-    public boolean onMenuItemActionCollapse(MenuItem item) {
-        return false;
-    }
 }
 

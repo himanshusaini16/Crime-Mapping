@@ -6,11 +6,9 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.content.IntentCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -45,8 +43,6 @@ import java.util.Random;
 import dmax.dialog.SpotsDialog;
 
 public class AddCrime extends AppCompatActivity  {
-    public static final int REQUEST_CODE_AddCrime = 100;
-    private Double lat, lng;
     private String crime_latitude_final, crime_longitude_final, crime_marker_final, crime_images_marker_final, crime_location_address_final;
     static EditText Date, Time;
     EditText cr_des;
@@ -54,12 +50,10 @@ public class AddCrime extends AppCompatActivity  {
     Intent s1;
     String crime_type_final, crime_date_final, crime_time_final, crime_description_final;
     private AlertDialog progressDialog;
-    Bitmap bitmap_image;
     private static final String TAG = "";
     String marker_images_URL = "http://thetechnophile.000webhostapp.com/markers-images/";
     String marker_URL = "http://thetechnophile.000webhostapp.com/markers/";
 
-    private final String SENDER_ID = "535718128844";
     private Random random = new Random();
 
     int crime_images[] = {R.drawable.icon_big_robbery, R.drawable.icon_big_moto, R.drawable.icon_big_car, R.drawable.icon_big_hijacking,
@@ -95,10 +89,10 @@ public class AddCrime extends AppCompatActivity  {
                 getApplicationContext(), new GeocoderHandler());
 
 
-        Date = (EditText) findViewById(R.id.EditDateCrime);
-        Time = (EditText) findViewById(R.id.EditTimeCrime);
-        cr_des = (EditText) findViewById(R.id.EditCrime);
-        Spinner mSpinner = (Spinner) findViewById(R.id.spinner_crimetype);
+        Date = findViewById(R.id.EditDateCrime);
+        Time = findViewById(R.id.EditTimeCrime);
+        cr_des = findViewById(R.id.EditCrime);
+        Spinner mSpinner = findViewById(R.id.spinner_crimetype);
         CustomAdapter mCustomAdapter = new CustomAdapter(AddCrime.this, crime_images, crime_marker, crime_heading, crime_description);
         mSpinner.setAdapter(mCustomAdapter);
 
@@ -165,6 +159,7 @@ public class AddCrime extends AppCompatActivity  {
     private void firebaseUpstream() {
         FirebaseMessaging fm = FirebaseMessaging.getInstance();
 
+        String SENDER_ID = "535718128844";
         RemoteMessage message = new RemoteMessage.Builder(SENDER_ID + "@gcm.googleapis.com")
                 .setMessageId(Integer.toString(random.nextInt(9999)))
                 .addData("Heading", "Crime Mapping")
@@ -204,7 +199,7 @@ public class AddCrime extends AppCompatActivity  {
                 if (response.equals("Successfully Added Crime Details to Database")) {
                     progressDialog.hide();
                     s1 = new Intent(AddCrime.this, BottomNavigationHomeActivity.class);
-                    s1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                    s1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(s1);
                     finish();
 

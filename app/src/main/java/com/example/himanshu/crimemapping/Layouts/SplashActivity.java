@@ -35,12 +35,12 @@ public class SplashActivity extends AppCompatActivity implements ConnectivityRec
 
                     if (!new PrefManager(SplashActivity.this).isUserLogedOut()) {
                         Intent ss = new Intent(SplashActivity.this, BottomNavigationHomeActivity.class);
-                        ss.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        ss.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(ss);
                         finish();
                     } else {
                         Intent ss = new Intent(SplashActivity.this, LoginActivity.class);
-                        ss.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        ss.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(ss);
                         finish();
                     }
@@ -52,6 +52,7 @@ public class SplashActivity extends AppCompatActivity implements ConnectivityRec
         };
         tp.start();
     }
+
 
     @Override
     protected void onResume() {
@@ -78,7 +79,7 @@ public class SplashActivity extends AppCompatActivity implements ConnectivityRec
                     .make(findViewById(R.id.splashlayout), message, Snackbar.LENGTH_LONG);
 
             View sbView = snackbar.getView();
-            TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+            TextView textView = sbView.findViewById(android.support.design.R.id.snackbar_text);
             textView.setTextColor(color);
             snackbar.show();
         }

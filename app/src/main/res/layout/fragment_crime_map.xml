@@ -5,6 +5,7 @@
     android:id="@+id/crimeMapFragment"
     tools:context="com.example.himanshu.crimemapping.Layouts.CrimeMapFragment">
 
+
     <com.google.android.gms.maps.MapView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/mapView"

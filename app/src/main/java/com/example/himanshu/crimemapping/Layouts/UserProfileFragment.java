@@ -1,14 +1,13 @@
 package com.example.himanshu.crimemapping.Layouts;
 
 
-import android.annotation.SuppressLint;
+
 import android.app.Fragment;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,8 +18,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.himanshu.crimemapping.ConnectivityReceiver;
-import com.example.himanshu.crimemapping.Layouts.LoginActivity;
-import com.example.himanshu.crimemapping.Layouts.PrefManager;
 import com.example.himanshu.crimemapping.MyApplication;
 import com.example.himanshu.crimemapping.R;
 import com.google.android.gms.ads.AdRequest;
@@ -94,7 +91,7 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
             Snackbar snackbar = Snackbar.make(v.findViewById(R.id.userProfileFragment), message, Snackbar.LENGTH_LONG);
 
             View sbView = snackbar.getView();
-            TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+            TextView textView = sbView.findViewById(android.support.design.R.id.snackbar_text);
             textView.setTextColor(color);
             snackbar.show();
         } }
