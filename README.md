@@ -4,4 +4,4 @@ This is an Online Crime Mapping android application which let users post crime g
 It uses Google Map API for showing the map into the application.
 
 
-!(Crime-Mapping/screenshot.png)
+!(https://github.com/himanshusaini16/Crime-Mapping/screenshot.png)
