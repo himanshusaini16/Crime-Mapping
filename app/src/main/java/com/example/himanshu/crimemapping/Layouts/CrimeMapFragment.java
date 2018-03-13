@@ -190,7 +190,7 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
             Address address = addressList.get(0);
             LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
             mMap.addMarker(new MarkerOptions().position(latLng).title("Searched Location"));
-            mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+            mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng), 3000, null);
         }
     }
 

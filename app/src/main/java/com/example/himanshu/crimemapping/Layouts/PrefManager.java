@@ -27,19 +27,5 @@ class PrefManager {
         return isEmailEmpty || isPasswordEmpty;
     }
 
-    void saveImagePreference(String key, String path) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("PictureDetails", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("KeyHai", key);
-        editor.putString("Path", path);
-        editor.apply();
-    }
 
-
-    boolean isUserOutImageHatao() {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("PictureDetails", Context.MODE_PRIVATE);
-        boolean isKeyEmpty = sharedPreferences.getString("KeyHai", "").isEmpty();
-        boolean isPathEmpty = sharedPreferences.getString("Path", "").isEmpty();
-        return isKeyEmpty || isPathEmpty;
-    }
 }

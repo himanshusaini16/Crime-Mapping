@@ -92,7 +92,18 @@
     </string>
     <string name="info_title_aboutus">About Us…</string>
     <string name="info_message_aboutus">Developers:\n\nHimanshu Saini\nArya Gaurav\nLakshendra Singh\nAmay Kalal\nKumar Santnu</string>
-    <string name="llogout">LOGOUT</string>
+    <string name="llogout">Logout</string>
+    <string name="edit_profile">Edit Profile</string>
+
+    <string name="invalid_name">Please enter a valid username</string>
+    <string name="invalid_email">Please enter a valid email</string>
+    <string name="invalid_password">Please enter a valid or at least 6 character password</string>
+    <string name="invalid_confirm_password">Password does not match</string>
+    <string name="invalid_crime_description">Please enter some crime description</string>
+    <string name="invalid_date">Please select crime date</string>
+    <string name="invalid_time">Please select crime time</string>
+    <string name="change_dp">Change Profile Picture</string>
+    <string name="remove_dp">Remove Profile Picture</string>
 
 
 </resources>

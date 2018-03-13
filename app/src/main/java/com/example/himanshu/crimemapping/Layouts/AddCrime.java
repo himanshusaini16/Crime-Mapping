@@ -29,6 +29,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.basgeekball.awesomevalidation.AwesomeValidation;
+import com.basgeekball.awesomevalidation.ValidationStyle;
+import com.basgeekball.awesomevalidation.utility.RegexTemplate;
 import com.example.himanshu.crimemapping.CustomAdapter;
 import com.example.himanshu.crimemapping.LocationAddress;
 import com.example.himanshu.crimemapping.R;
@@ -42,12 +45,13 @@ import java.util.Random;
 
 import dmax.dialog.SpotsDialog;
 
-public class AddCrime extends AppCompatActivity  {
+public class AddCrime extends AppCompatActivity {
     private String crime_latitude_final, crime_longitude_final, crime_marker_final, crime_images_marker_final, crime_location_address_final;
-    static EditText Date, Time;
+    EditText Date, Time;
     EditText cr_des;
     String format, cmmm = ".png";
     Intent s1;
+    private AwesomeValidation awesomeValidation;
     String crime_type_final, crime_date_final, crime_time_final, crime_description_final;
     private AlertDialog progressDialog;
     private static final String TAG = "";
@@ -84,10 +88,10 @@ public class AddCrime extends AppCompatActivity  {
 
         crime_latitude_final = intent2.getStringExtra("lat");
         crime_longitude_final = intent2.getStringExtra("lng");
-        LocationAddress locationAddress = new LocationAddress();
         LocationAddress.getAddressFromLocation(Double.parseDouble(crime_latitude_final), Double.parseDouble(crime_longitude_final),
                 getApplicationContext(), new GeocoderHandler());
 
+        awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
 
         Date = findViewById(R.id.EditDateCrime);
         Time = findViewById(R.id.EditTimeCrime);
@@ -130,8 +134,13 @@ public class AddCrime extends AppCompatActivity  {
 
             }
         });
+    }
 
+    private void addValidationToViews() {
 
+        awesomeValidation.addValidation(this, R.id.EditCrime, RegexTemplate.NOT_EMPTY, R.string.invalid_crime_description);
+        awesomeValidation.addValidation(this, R.id.EditDateCrime, RegexTemplate.NOT_EMPTY, R.string.invalid_date);
+        awesomeValidation.addValidation(this, R.id.EditTimeCrime, RegexTemplate.NOT_EMPTY, R.string.invalid_time);
     }
 
     @Override
@@ -146,9 +155,7 @@ public class AddCrime extends AppCompatActivity  {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_addcrime) {
-            authenticate();
             addCrimeToDatabase();
             return true;
         }
@@ -179,14 +186,13 @@ public class AddCrime extends AppCompatActivity  {
     }
 
 
-
     private void addCrimeToDatabase() {
+        addValidationToViews();
+        authenticate();
 
         firebaseUpstream();
 
         RequestQueue queue = Volley.newRequestQueue(AddCrime.this);
-
-        final String finalResponse = null;
 
         String s_URL = "http://thetechnophile.000webhostapp.com/add_crime.php";
 
@@ -210,17 +216,12 @@ public class AddCrime extends AppCompatActivity  {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         progressDialog.hide();
-                        // error
-                        Log.d("ErrorResponse", finalResponse);
-
-
                     }
                 }
         ) {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-
 
                 params.put("crime_type", crime_type_final);
                 params.put("crime_marker", crime_marker_final);
@@ -241,51 +242,11 @@ public class AddCrime extends AppCompatActivity  {
 
 
     public void authenticate() {
-        Log.d(TAG, "Add Crime");
-
-        if (!validate()) {
-            onAuthFailed();
-            return;
+        if (awesomeValidation.validate()) {
+            crime_description_final = cr_des.getText().toString();
         }
-
         progressDialog = new SpotsDialog(AddCrime.this, R.style.Custom2);
-
         progressDialog.show();
-    }
-
-    public void onAuthFailed() {
-        Toast.makeText(getBaseContext(), "Error while Adding Crime", Toast.LENGTH_LONG).show();
-
-    }
-
-
-    public boolean validate() {
-        boolean valid = true;
-
-
-        crime_description_final = cr_des.getText().toString();
-
-        if (crime_description_final.length()==0 ) {
-            Toast.makeText(AddCrime.this, "enter valid details", Toast.LENGTH_LONG).show();
-            valid = false;
-        }
-        if (crime_date_final.length()==0 ) {
-            Toast.makeText(AddCrime.this, "enter valid details", Toast.LENGTH_LONG).show();
-            valid = false;
-        }
-
-        if (crime_time_final.length()==0) {
-            Toast.makeText(AddCrime.this, "enter valid details", Toast.LENGTH_LONG).show();
-            valid = false;
-        }
-
-        if (crime_description_final.length()==0 && crime_date_final.length()==0 && crime_time_final.length()==0) {
-            Toast.makeText(AddCrime.this, "enter valid details", Toast.LENGTH_LONG).show();
-            valid = false;
-        }
-
-
-        return valid;
     }
 
     public void openDatePicker(View v) {
@@ -310,12 +271,11 @@ public class AddCrime extends AppCompatActivity  {
         datePickerDialog.show();
     }
 
-
     public void openTimePicker(View v) {
         final Calendar c = Calendar.getInstance();
         int mHour = c.get(Calendar.HOUR_OF_DAY);
         int mMinute = c.get(Calendar.MINUTE);
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT,
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT,
                 new TimePickerDialog.OnTimeSetListener() {
 
                     @Override
@@ -323,26 +283,16 @@ public class AddCrime extends AppCompatActivity  {
                                           int minute) {
 
                         if (hourOfDay == 0) {
-
                             hourOfDay += 12;
-
                             format = "AM";
                         } else if (hourOfDay == 12) {
-
                             format = "PM";
-
                         } else if (hourOfDay > 12) {
-
                             hourOfDay -= 12;
-
                             format = "PM";
-
                         } else {
-
                             format = "AM";
                         }
-
-
                         Time.setText(hourOfDay + ":" + minute + " " + format);
                         crime_time_final = hourOfDay + ":" + minute + " " + format;
                     }

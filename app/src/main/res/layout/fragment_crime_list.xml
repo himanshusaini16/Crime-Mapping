@@ -1,8 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:id="@+id/crimekiid"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
     tools:context="com.example.himanshu.crimemapping.Layouts.CrimeListFragment">
 
 
@@ -11,14 +12,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <ListView
-        android:id="@+id/lv_crime"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:divider="@color/list_divider"
-        android:dividerHeight="1dp"
-        android:listSelector="@drawable/list_row_selector" />
-
+        <ListView
+            android:id="@+id/lv_crime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:cacheColorHint="@android:color/transparent"
+            android:divider="@null"
+            android:dividerHeight="4dp"
+            android:listSelector="@android:color/transparent" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

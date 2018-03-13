@@ -6,26 +6,27 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,7 +45,7 @@ import java.io.IOException;
 import static android.app.Activity.RESULT_OK;
 
 
-public class UserProfileFragment extends Fragment implements ConnectivityReceiver.ConnectivityReceiverListener, View.OnClickListener {
+public class UserProfileFragment extends Fragment implements ConnectivityReceiver.ConnectivityReceiverListener {
 
     AdView mAdView;
     View v;
@@ -56,16 +57,23 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
     CircularImageView changedp;
     Bitmap btmap;
 
+    private Context mContext;
+    private PopupWindow popupWindow;
+    RelativeLayout mRelativeLayout;
+
+    Button changeDPicture, removeDPicture;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_user_profile, container, false);
 
+        mContext = getContext();
+
         changedp = v.findViewById(R.id.UserProfileImage);
-        Button editpro = v.findViewById(R.id.userProfileEditButton);
-        changedp.setOnClickListener(this);
-        editpro.setOnClickListener(this);
+
+        mRelativeLayout = v.findViewById(R.id.userProfileFragment);
 
         sharedpreferences = getContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         if (sharedpreferences.contains(key)) {
@@ -74,32 +82,66 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
             changedp.setImageBitmap(btmap);
         }
 
-
         mAuth = FirebaseAuth.getInstance();
-
         mAdView = v.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
-        v.setOnClickListener(this);
 
+        changedp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View customView = inflater.inflate(R.layout.popup_window_editimage, null);
+                popupWindow = new PopupWindow(customView, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                popupWindow.setIgnoreCheekPress();
+                popupWindow.setFocusable(true);
+                popupWindow.setOutsideTouchable(false);
+                popupWindow.update();
+                popupWindow.setAnimationStyle(R.style.popup_window_animation_phone);
+                popupWindow.showAtLocation(mRelativeLayout, Gravity.CENTER, 0, 0);
+
+                changeDPicture = popupWindow.getContentView().findViewById(R.id.changeDp);
+                removeDPicture = popupWindow.getContentView().findViewById(R.id.removeDp);
+
+
+                changeDPicture.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent();
+                        intent.setType("image/*");
+                        intent.setAction(Intent.ACTION_GET_CONTENT);
+                        popupWindow.dismiss();
+                        startActivityForResult(Intent.createChooser(intent, "Select Picture"), RESULT_LOAD_IMAGE);
+                    }
+                });
+                removeDPicture.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Picasso.with(getActivity()).load(R.mipmap.ic_human_round).noPlaceholder().centerCrop().fit().into(changedp);
+                        popupWindow.dismiss();
+                        btmap = BitmapFactory.decodeResource(getContext().getResources(), R.mipmap.ic_human_round);
+                        SharedPreferences.Editor editor = sharedpreferences.edit();
+                        editor.putString(key, encodeTobase64(btmap));
+                        editor.apply();
+                    }
+                });
+            }
+        });
 
         setHasOptionsMenu(true);
         return v;
     }
 
-
     @Override
     public void onCreateOptionsMenu(final Menu menu, MenuInflater inflater) {
-
         inflater.inflate(R.menu.menu_profile, menu);
-
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // handle item selection
+       
         switch (item.getItemId()) {
             case R.id.user_logout:
                 saveLoginDetails(null, null);
@@ -110,6 +152,10 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
                 startActivity(ss);
                 break;
 
+
+            case R.id.userProfileEditButton:
+                Toast.makeText(getActivity(), "Edit", Toast.LENGTH_SHORT).show();
+                break;
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -155,24 +201,6 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
         showSnack(isConnected);
     }
 
-    @Override
-    public void onClick(View v) {
-
-        switch (v.getId()) {
-            case R.id.UserProfileImage:
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), RESULT_LOAD_IMAGE);
-                break;
-
-            case R.id.userProfileEditButton:
-                Toast.makeText(getActivity(), "Edit", Toast.LENGTH_SHORT).show();
-                break;
-
-        }
-
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

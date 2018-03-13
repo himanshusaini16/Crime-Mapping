@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,6 +25,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.basgeekball.awesomevalidation.AwesomeValidation;
+import com.basgeekball.awesomevalidation.ValidationStyle;
+import com.basgeekball.awesomevalidation.utility.RegexTemplate;
 import com.example.himanshu.crimemapping.ConnectivityReceiver;
 import com.example.himanshu.crimemapping.MyApplication;
 import com.example.himanshu.crimemapping.R;
@@ -60,6 +64,7 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
     private static final int RC_SIGN_IN = 234;
     private static final String TAG2 = "crimemapping";
     GoogleSignInClient mGoogleSignInClient;
+    private AwesomeValidation awesomeValidation;
 
 
     private AlertDialog progressDialog;
@@ -74,7 +79,6 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
     public static final String PREFS_NAME = "MyPrefsFile";
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,14 +86,14 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
 
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
+        awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
+
         mAuth = FirebaseAuth.getInstance();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         mDatabase = database.getReference("UserDetails");
 
-
-
-        sp=getSharedPreferences(PREFS_NAME,MODE_PRIVATE);
-        ep=sp.edit();
+        sp = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        ep = sp.edit();
         ep.apply();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -102,8 +106,8 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
 
         signupWithGoogle = findViewById(R.id.startWithGoogle);
         signUpButton = findViewById(R.id.singupUser);
-        signUpEmail = findViewById(R.id.emailSignup);
         signUpUserName = findViewById(R.id.usernameSignup);
+        signUpEmail = findViewById(R.id.emailSignup);
         signUpPassword = findViewById(R.id.passwordSignup);
         signUpRePassword = findViewById(R.id.rePasswordSignup);
 
@@ -131,6 +135,16 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
 
     }
 
+    private void addValidationToViews() {
+
+        awesomeValidation.addValidation(this, R.id.usernameSignup, RegexTemplate.NOT_EMPTY, R.string.invalid_name);
+        awesomeValidation.addValidation(this, R.id.emailSignup, Patterns.EMAIL_ADDRESS, R.string.invalid_email);
+        String regexPassword = ".{6,}";
+        awesomeValidation.addValidation(this, R.id.passwordSignup, regexPassword, R.string.invalid_password);
+        awesomeValidation.addValidation(this, R.id.rePasswordSignup, R.id.passwordSignup, R.string.invalid_confirm_password);
+
+    }
+
 
     @Override
     protected void onStart() {
@@ -140,6 +154,7 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
 
     private void signupRequest() {
 
+        addValidationToViews();
         authenticate();
 
         saveLoginDetails(uemail, upasswd);
@@ -151,13 +166,8 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
         //Saving the Artist
         mDatabase.child(id).setValue(ud);
 
-
         RequestQueue queue = Volley.newRequestQueue(SignupActivity.this);
-
-        final String finalResponse = null;
-
         String s_URL = "http://thetechnophile.000webhostapp.com/signup.php";
-
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, s_URL, new Response.Listener<String>() {
 
@@ -179,9 +189,12 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         progressDialog.hide();
-                        // error
-                        Log.d("ErrorResponse", finalResponse);
-
+                        Snackbar snackbar = Snackbar.make(findViewById(R.id.signupLayout), "Invalid Data Entered", Snackbar.LENGTH_LONG);
+                        View sbView = snackbar.getView();
+                        TextView textView = sbView.findViewById(android.support.design.R.id.snackbar_text);
+                        textView.setTextColor(getResources().getColor(R.color.red));
+                        snackbar.show();
+                        signUpUserName.requestFocus();
 
                     }
                 }
@@ -204,76 +217,20 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
     }
 
 
-
     private void saveLoginDetails(String email, String password) {
         new PrefManager(this).saveLoginDetails(email, password);
     }
 
 
     public void authenticate() {
-        Log.d(TAG, "Signup");
-
-        if (!validate()) {
-            onAuthFailed();
-            return;
+        if (awesomeValidation.validate()) {
+            uemail = signUpEmail.getText().toString();
+            uname = signUpUserName.getText().toString();
+            upasswd = signUpPassword.getText().toString();
+            urepasswd = signUpRePassword.getText().toString();
         }
-
         progressDialog = new SpotsDialog(SignupActivity.this, R.style.Custom);
-
         progressDialog.show();
-    }
-
-    public void onAuthFailed() {
-        Snackbar snackbar = Snackbar.make(findViewById(R.id.signupLayout), "Error Occured", Snackbar.LENGTH_LONG);
-
-        View sbView = snackbar.getView();
-        TextView textView = sbView.findViewById(android.support.design.R.id.snackbar_text);
-        textView.setTextColor(getResources().getColor(R.color.white));
-        snackbar.show();
-
-    }
-
-
-    public boolean validate() {
-        boolean valid = true;
-
-        uemail = signUpEmail.getText().toString();
-        uname = signUpUserName.getText().toString();
-        upasswd = signUpPassword.getText().toString();
-        urepasswd = signUpRePassword.getText().toString();
-
-
-
-
-        if (uemail.isEmpty()) {
-            signUpEmail.setError("enter a valid email address");
-            valid = false;
-        } else {
-            signUpEmail.setError(null);
-        }
-
-        if (uname.isEmpty()) {
-            signUpUserName.setError("enter a valid username");
-            valid = false;
-        } else {
-            signUpUserName.setError(null);
-        }
-
-        if (upasswd.isEmpty() || upasswd.length() < 4 || upasswd.length() > 15) {
-            signUpPassword.setError("between 4 and 10 characters");
-            valid = false;
-        } else {
-            signUpPassword.setError(null);
-        }
-
-        if (urepasswd.isEmpty() || !urepasswd.equals(upasswd)) {
-            signUpRePassword.setError("password does not match");
-            valid = false;
-        } else {
-            signUpRePassword.setError(null);
-        }
-
-        return valid;
     }
 
     private void showSnack(boolean isConnected) {
@@ -285,7 +242,6 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
 
 
             Snackbar snackbar = Snackbar.make(findViewById(R.id.signupLayout), message, Snackbar.LENGTH_LONG);
-
             View sbView = snackbar.getView();
             TextView textView = sbView.findViewById(android.support.design.R.id.snackbar_text);
             textView.setTextColor(color);
@@ -326,10 +282,9 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
                 GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
                 account11 = result.getSignInAccount();
 
-                String aa=account11.getEmail();
-                String bb=account11.getDisplayName();
-                saveLoginDetails(aa,bb);
-
+                String aa = account11.getEmail();
+                String bb = account11.getDisplayName();
+                saveLoginDetails(aa, bb);
 
 
                 //authenticating with firebase
@@ -357,7 +312,6 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
                             s1 = new Intent(SignupActivity.this, BottomNavigationHomeActivity.class);
                             s1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(s1);
-
 
 
                         } else {
