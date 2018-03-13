@@ -62,6 +62,7 @@ public class SplashActivity extends AppCompatActivity implements ConnectivityRec
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
 
         ConnectivityReceiver connectivityReceiver = new ConnectivityReceiver();
+
         registerReceiver(connectivityReceiver, intentFilter);
 
 

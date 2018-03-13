@@ -86,14 +86,12 @@
     <string name="timeee">Time:</string>
     <string name="coordinatess">Coordinates:</string>
     <string name="info_title">About Crime Mapping…</string>
-    <string name="info_message">Crime Mapping is an Android Application to generate real time Crime Maps.Users can select any coordinate from map and can post crime details online. \n\n
-        All rights reserved.We are not responsible for any damages incurred from using this application. This application and
+    <string name="info_message">Crime Mapping is an Android Application to generate real time Crime Maps.Users can select any coordinate from map and can post crime details online. \n\nAll rights reserved.We are not responsible for any damages incurred from using this application. This application and
         merely informative, updated by the users themselves.\nThe author is not responsible for the inaccuracy of the information entered.
-        This application is in continuous development.
+        \n\nThis application is in continuous development.
     </string>
     <string name="info_title_aboutus">About Us…</string>
-    <string name="info_message_aboutus">Developers:\n\n
-        Himanshu Saini\nArya Gaurav\nLakshendra Singh\nAmay Kalal\nKumar Santnu</string>
+    <string name="info_message_aboutus">Developers:\n\nHimanshu Saini\nArya Gaurav\nLakshendra Singh\nAmay Kalal\nKumar Santnu</string>
     <string name="llogout">LOGOUT</string>
 
 

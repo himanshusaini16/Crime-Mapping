@@ -19,10 +19,9 @@
 
     <application
         android:name=".AppController"
-
         android:allowBackup="true"
         android:fullBackupContent="true"
-        android:icon="@mipmap/logo"
+        android:icon="@drawable/icon_for_aboutus"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">

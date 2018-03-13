@@ -241,10 +241,10 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
 
         new LovelyInfoDialog(getActivity())
                 .setCancelable(true)
-                .setTopColorRes(R.color.black)
+                .setTopColorRes(R.color.colorApplication)
                 .setTitle(R.string.info_title_aboutus)
+                .setIcon(BitmapFactory.decodeResource(getContext().getResources(), R.mipmap.user_image_info_round))
                 .setMessage(R.string.info_message_aboutus)
-
                 .show();
     }
 

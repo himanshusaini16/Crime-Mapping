@@ -1,34 +1,82 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/userProfileFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/userProfileFragment"
     tools:context="com.example.himanshu.crimemapping.Layouts.UserProfileFragment">
 
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="fill_parent"
+        android:layout_height="250dp"
+        android:layout_gravity="center"
+        android:layout_marginEnd="6dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="10dp">
 
-    <com.mikhaellopez.circularimageview.CircularImageView
-        android:layout_width="180dp"
-        android:layout_height="180dp"
-        android:src="@drawable/logo"
-        app:civ_border_color="#EEEEEE"
-        android:layout_marginTop="20dp"
-        android:layout_centerHorizontal="true"
-        app:civ_border_width="0dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:onClick="changeProfilePicture" />
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/UserProfileImage"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@mipmap/ic_human_round"
+            app:civ_border_color="#EEEEEE"
+            app:civ_border_width="0dp" />
 
-    <com.google.android.gms.ads.AdView
-        xmlns:ads="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/adView"
-        android:layout_alignParentBottom="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginBottom="50dp"
-        ads:adSize="BANNER"
-        ads:adUnitId="ca-app-pub-4510895115386086~4521143649">
-    </com.google.android.gms.ads.AdView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="140dp"
+            android:text="HIMANSHU SAINI"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/userProfileEditButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="190dp"
+            android:background="#ffffffff"
+            android:drawableLeft="@drawable/ic_edit_black_24dp"
+            android:drawablePadding="2dp"
+            android:paddingEnd="4dp"
+            android:paddingStart="4dp"
+            android:text="Edit Profile" />
+    </android.support.v7.widget.CardView>
+
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view2"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/card_view"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="8dp">
+
+        <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom|center_horizontal"
+            ads:adSize="BANNER"
+            ads:adUnitId="ca-app-pub-4510895115386086~4521143649" />
+
+    </android.support.v7.widget.CardView>
 
 </RelativeLayout>
