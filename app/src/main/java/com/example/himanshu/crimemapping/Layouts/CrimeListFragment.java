@@ -43,7 +43,6 @@ public class CrimeListFragment extends Fragment implements ConnectivityReceiver.
 
     View v;
 
-    //    Communicate cm;
     private static final String TAG = CrimeListFragment.class.getSimpleName();
     private static final String url = "http://thetechnophile.000webhostapp.com/load_crime.json";
     private AlertDialog progressDialog;
@@ -57,10 +56,8 @@ public class CrimeListFragment extends Fragment implements ConnectivityReceiver.
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        v = inflater.inflate(R.layout.fragment_crime_list, container, false);
 
-//        cm = (Communicate) getActivity();
+        v = inflater.inflate(R.layout.fragment_crime_list, container, false);
 
         mSwipeRefreshLayout = v.findViewById(R.id.swipeToRefresh);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorApplication);
@@ -88,17 +85,12 @@ public class CrimeListFragment extends Fragment implements ConnectivityReceiver.
 
                 latHai = ss.getLat();
                 lngHai = ss.getLng();
-//                cm.sendData(latHai, lngHai);
-
             }
         });
 
-
         progressDialog = new SpotsDialog(getActivity(), R.style.Custom3);
-
         progressDialog.show();
 
-        // Creating volley request obj
         JsonArrayRequest movieReq = new JsonArrayRequest(url,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -109,7 +101,6 @@ public class CrimeListFragment extends Fragment implements ConnectivityReceiver.
                         // Parsing json
                         for (int i = response.length(); i >= 0; i--) {
                             try {
-
                                 JSONObject obj = response.getJSONObject(i);
                                 Crime movie = new Crime();
                                 movie.setTitle(obj.getString("crime_type"));
@@ -189,6 +180,7 @@ public class CrimeListFragment extends Fragment implements ConnectivityReceiver.
         ConnectivityReceiver connectivityReceiver = new ConnectivityReceiver();
         getActivity().registerReceiver(connectivityReceiver, intentFilter);
         MyApplication.getInstance().setConnectivityListener(this);
+
     }
 
 

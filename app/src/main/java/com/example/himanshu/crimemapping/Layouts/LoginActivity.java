@@ -1,8 +1,10 @@
 package com.example.himanshu.crimemapping.Layouts;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
@@ -43,12 +45,17 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
     private AlertDialog progressDialog;
     Intent s2;
     private AwesomeValidation awesomeValidation;
+    SharedPreferences userDataSharedPreferenceLogin;
+
+    public static final String mypreferencethisislogin = "myprefLogin";
+    public static final String UserDataEmail = "emailKey";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        userDataSharedPreferenceLogin = getSharedPreferences(mypreferencethisislogin, Context.MODE_PRIVATE);
 
         loginUserName = findViewById(R.id.username);
         loginPassword = findViewById(R.id.password);
@@ -129,6 +136,10 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
         if (awesomeValidation.validate()) {
             lnemail = loginUserName.getText().toString();
             lnpassword = loginPassword.getText().toString();
+
+            SharedPreferences.Editor ed = userDataSharedPreferenceLogin.edit();
+            ed.putString(UserDataEmail, lnemail);
+            ed.apply();
         }
         progressDialog = new SpotsDialog(LoginActivity.this, R.style.Custom0);
         progressDialog.show();

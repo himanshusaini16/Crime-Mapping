@@ -56,10 +56,18 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
     SharedPreferences sharedpreferences;
     CircularImageView changedp;
     Bitmap btmap;
-
+    TextView upName;
     private Context mContext;
     private PopupWindow popupWindow;
     RelativeLayout mRelativeLayout;
+
+    SharedPreferences userDataSharedPreferenceSignup, userDataSharedPreferenceLogin;
+
+
+    public static final String mypreferencethisislogin = "myprefLogin";
+    public static final String mypreferencethisissignup = "myprefSignup";
+    public static final String UserDataEmail = "emailKey";
+    public static final String UserDataName = "nameKey";
 
     Button changeDPicture, removeDPicture;
 
@@ -69,10 +77,22 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_user_profile, container, false);
 
+        upName = v.findViewById(R.id.UserProfileName);
+
+        userDataSharedPreferenceLogin = getContext().getSharedPreferences(mypreferencethisislogin, Context.MODE_PRIVATE);
+        userDataSharedPreferenceSignup = getContext().getSharedPreferences(mypreferencethisissignup, Context.MODE_PRIVATE);
+
+
+        if (userDataSharedPreferenceLogin.contains(UserDataEmail)) {
+            upName.setText(userDataSharedPreferenceLogin.getString(UserDataEmail, ""));
+        }
+
+        if (userDataSharedPreferenceSignup.contains(UserDataName)) {
+            upName.setText(userDataSharedPreferenceSignup.getString(UserDataName, ""));
+        }
+
         mContext = getContext();
-
         changedp = v.findViewById(R.id.UserProfileImage);
-
         mRelativeLayout = v.findViewById(R.id.userProfileFragment);
 
         sharedpreferences = getContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
@@ -141,12 +161,15 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-       
+
         switch (item.getItemId()) {
             case R.id.user_logout:
                 saveLoginDetails(null, null);
                 sharedpreferences = getContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
                 sharedpreferences.edit().remove(key).apply();
+                userDataSharedPreferenceSignup.edit().remove(UserDataName).apply();
+                userDataSharedPreferenceSignup.edit().remove(UserDataEmail).apply();
+                userDataSharedPreferenceLogin.edit().remove(UserDataEmail).apply();
                 Intent ss = new Intent(getActivity(), LoginActivity.class);
                 ss.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(ss);

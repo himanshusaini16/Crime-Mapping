@@ -5,7 +5,9 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -46,7 +48,7 @@ import java.util.Random;
 import dmax.dialog.SpotsDialog;
 
 public class AddCrime extends AppCompatActivity {
-    private String crime_latitude_final, crime_longitude_final, crime_marker_final, crime_images_marker_final, crime_location_address_final;
+    private String crime_latitude_final, crime_longitude_final, crime_marker_final, crime_images_marker_final, crime_location_address_final, crime_email_final;
     EditText Date, Time;
     EditText cr_des;
     String format, cmmm = ".png";
@@ -57,6 +59,11 @@ public class AddCrime extends AppCompatActivity {
     private static final String TAG = "";
     String marker_images_URL = "http://thetechnophile.000webhostapp.com/markers-images/";
     String marker_URL = "http://thetechnophile.000webhostapp.com/markers/";
+
+    SharedPreferences userDataSharedPreferenceSignup, userDataSharedPreferenceLogin;
+    public static final String mypreferencethisislogin = "myprefLogin";
+    public static final String mypreferencethisissignup = "myprefSignup";
+    public static final String UserDataEmail = "emailKey";
 
     private Random random = new Random();
 
@@ -92,6 +99,19 @@ public class AddCrime extends AppCompatActivity {
                 getApplicationContext(), new GeocoderHandler());
 
         awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
+
+        userDataSharedPreferenceLogin = getSharedPreferences(mypreferencethisislogin, Context.MODE_PRIVATE);
+        userDataSharedPreferenceSignup = getSharedPreferences(mypreferencethisissignup, Context.MODE_PRIVATE);
+
+
+        if (userDataSharedPreferenceLogin.contains(UserDataEmail)) {
+            crime_email_final = userDataSharedPreferenceLogin.getString(UserDataEmail, "");
+        }
+
+        if (userDataSharedPreferenceSignup.contains(UserDataEmail)) {
+            crime_email_final = userDataSharedPreferenceSignup.getString(UserDataEmail, "");
+        }
+
 
         Date = findViewById(R.id.EditDateCrime);
         Time = findViewById(R.id.EditTimeCrime);
@@ -222,7 +242,7 @@ public class AddCrime extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-
+                params.put("email", crime_email_final);
                 params.put("crime_type", crime_type_final);
                 params.put("crime_marker", crime_marker_final);
                 params.put("crime_image_marker", crime_images_marker_final);

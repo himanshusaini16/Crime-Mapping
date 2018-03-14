@@ -1,6 +1,7 @@
 package com.example.himanshu.crimemapping.Layouts;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -74,6 +75,12 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
     GoogleSignInAccount account11;
     DatabaseReference mDatabase;
 
+    SharedPreferences userDataSharedPreferenceSignup;
+
+    public static final String mypreferencethisissignup = "myprefSignup";
+    public static final String UserDataEmail = "emailKey";
+    public static final String UserDataName = "nameKey";
+
     SharedPreferences sp;
     SharedPreferences.Editor ep;
     public static final String PREFS_NAME = "MyPrefsFile";
@@ -85,6 +92,8 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
         setContentView(R.layout.activity_signup);
 
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
+        userDataSharedPreferenceSignup = getSharedPreferences(mypreferencethisissignup, Context.MODE_PRIVATE);
 
         awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
 
@@ -228,6 +237,12 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
             uname = signUpUserName.getText().toString();
             upasswd = signUpPassword.getText().toString();
             urepasswd = signUpRePassword.getText().toString();
+
+            SharedPreferences.Editor ed = userDataSharedPreferenceSignup.edit();
+            ed.putString(UserDataName, uname);
+            ed.putString(UserDataEmail, uemail);
+            ed.apply();
+
         }
         progressDialog = new SpotsDialog(SignupActivity.this, R.style.Custom);
         progressDialog.show();

@@ -28,17 +28,28 @@ public class LocationAddress {
                     if (addressList != null && addressList.size() > 0) {
                         Address address = addressList.get(0);
                         StringBuilder sb = new StringBuilder();
+
+
                         for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
                             sb.append(address.getAddressLine(i)).append(", ");
                         }
 
+
                         if (address.getSubLocality() != null) {
                             sb.append(address.getSubLocality()).append(", ");
                         }
-                        sb.append(address.getLocality()).append(", ");
+
+
+                        if (address.getLocality() != null) {
+                            sb.append(address.getLocality()).append(", ");
+                        }
+
+
                         if (address.getPostalCode() != null) {
                             sb.append(address.getPostalCode()).append(", ");
                         }
+
+
                         sb.append(address.getAdminArea()).append(", ");
                         sb.append(address.getCountryName());
                         result = sb.toString();

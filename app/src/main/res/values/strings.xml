@@ -37,7 +37,7 @@
     <string name="layout_addcrime_time">Approximate time:</string>
     <string name="layout_addcrime_crimetype">Crime Type</string>
     <string name="email">EMAIL</string>
-    <string name="username">USERNAME</string>
+    <string name="username">YOUR NAME</string>
     <string name="password">PASSWORD</string>
     <string name="repassword">RE-ENTER PASSWORD</string>
     <string name="log_in">Log In</string>
