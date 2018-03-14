@@ -16,6 +16,7 @@ import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.util.Base64;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,13 +25,28 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.himanshu.crimemapping.AppController;
 import com.example.himanshu.crimemapping.ConnectivityReceiver;
+import com.example.himanshu.crimemapping.Crime_UserRelated;
+import com.example.himanshu.crimemapping.Custom_UserListAdapter;
 import com.example.himanshu.crimemapping.MyApplication;
 import com.example.himanshu.crimemapping.R;
 import com.google.android.gms.ads.AdRequest;
@@ -39,8 +55,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -51,11 +75,21 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
     View v;
     FirebaseAuth mAuth;
     private static int RESULT_LOAD_IMAGE = 1;
-    public static final String MyPREFERENCES = "MyPre";//file name
+    public static final String MyPREFERENCES = "MyPre";
     public static final String key = "nameKey";
     SharedPreferences sharedpreferences;
     CircularImageView changedp;
     Bitmap btmap;
+    String userEmail;
+    String deleteRow;
+    ListView listView;
+
+    private static final String TAG = UserProfileFragment.class.getSimpleName();
+    private static final String url = "http://thetechnophile.000webhostapp.com/load_crime_UserRelated.json";
+    private List<Crime_UserRelated> UserCrimeList = new ArrayList<>();
+    private Custom_UserListAdapter adapter;
+
+    private ProgressBar progressBar;
     TextView upName;
     private Context mContext;
     private PopupWindow popupWindow;
@@ -71,11 +105,13 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
 
     Button changeDPicture, removeDPicture;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_user_profile, container, false);
+
+        progressBar = v.findViewById(R.id.progressBar);
+        loadUserCrimeList();
 
         upName = v.findViewById(R.id.UserProfileName);
 
@@ -85,11 +121,32 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
 
         if (userDataSharedPreferenceLogin.contains(UserDataEmail)) {
             upName.setText(userDataSharedPreferenceLogin.getString(UserDataEmail, ""));
+            userEmail = userDataSharedPreferenceLogin.getString(UserDataEmail, "");
         }
 
         if (userDataSharedPreferenceSignup.contains(UserDataName)) {
             upName.setText(userDataSharedPreferenceSignup.getString(UserDataName, ""));
         }
+        if (userDataSharedPreferenceSignup.contains(UserDataEmail)) {
+            userEmail = userDataSharedPreferenceSignup.getString(UserDataEmail, "");
+        }
+
+
+        listView = v.findViewById(R.id.Userprofile_crimeList);
+        adapter = new Custom_UserListAdapter(getActivity(), UserCrimeList);
+        listView.setAdapter(adapter);
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Crime_UserRelated ss = (Crime_UserRelated) listView.getItemAtPosition(position);
+                deleteRow = ss.getDesUser();
+                UserCrimeList.remove(position);
+                return false;
+            }
+        });
+        registerForContextMenu(listView);
+
 
         mContext = getContext();
         changedp = v.findViewById(R.id.UserProfileImage);
@@ -108,6 +165,36 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
         mAdView.loadAd(adRequest);
 
 
+        JsonArrayRequest listReq = new JsonArrayRequest(url,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d(TAG, response.toString());
+                        progressBar.setVisibility(View.INVISIBLE);
+                        for (int i = response.length(); i >= 0; i--) {
+                            try {
+                                JSONObject obj = response.getJSONObject(i);
+                                Crime_UserRelated ucrime = new Crime_UserRelated();
+                                ucrime.setTitleUser(obj.getString("crime_type"));
+                                ucrime.setThumbnailUrlUser(obj.getString("crime_image_marker"));
+                                ucrime.setDesUser(obj.getString("crime_description"));
+                                ucrime.setAddressUser(obj.getString("crime_location_address"));
+
+                                UserCrimeList.add(ucrime);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+            }
+        });
+
+        AppController.getInstance().addToRequestQueue(listReq);
         changedp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,9 +241,85 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
         return v;
     }
 
+    private void loadUserCrimeList() {
+
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        String s_URL = "http://thetechnophile.000webhostapp.com/load_crime_UserRelated.php";
+        StringRequest postRequest = new StringRequest(Request.Method.POST, s_URL, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("email", userEmail);
+                return params;
+            }
+        };
+        postRequest.setRetryPolicy(new DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        queue.add(postRequest);
+    }
+
     @Override
     public void onCreateOptionsMenu(final Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_profile, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        if (item.getTitle() == "Delete") {
+            functionToDelete();
+        }
+        return super.onContextItemSelected(item);
+    }
+
+
+    private void functionToDelete() {
+
+        progressBar.setVisibility(View.VISIBLE);
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        String s_URL = "http://thetechnophile.000webhostapp.com/delete_crimeUser.php";
+        StringRequest postRequest = new StringRequest(Request.Method.POST, s_URL, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("crime_description", deleteRow);
+                return params;
+            }
+        };
+        postRequest.setRetryPolicy(new DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        queue.add(postRequest);
+
+        shuffle();
+    }
+
+    private void shuffle() {
+        adapter.notifyDataSetChanged();
+        adapter.notifyDataSetInvalidated();
+        progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        menu.add(0, v.getId(), 1, "Delete");
+        super.onCreateContextMenu(menu, v, menuInfo);
     }
 
     @Override
@@ -247,9 +410,8 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
     }
 
     public static String encodeTobase64(Bitmap image) {
-        Bitmap immage = image;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        immage.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        image.compress(Bitmap.CompressFormat.PNG, 100, baos);
         byte[] b = baos.toByteArray();
         String imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
 

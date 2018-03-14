@@ -104,6 +104,7 @@
     <string name="invalid_time">Please select crime time</string>
     <string name="change_dp">Change Profile Picture</string>
     <string name="remove_dp">Remove Profile Picture</string>
+    <string name="my_reported_crimes"><u>My Reported Crimes:</u></string>
 
 
 </resources>

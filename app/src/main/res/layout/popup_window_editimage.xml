@@ -7,6 +7,7 @@
     android:padding="15dp">
 
     <Button
+        android:textStyle="normal"
         android:id="@+id/changeDp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,6 +17,7 @@
         android:textSize="16sp" />
 
     <Button
+        android:textStyle="normal"
         android:id="@+id/removeDp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -111,18 +111,13 @@ public class CrimeListFragment extends Fragment implements ConnectivityReceiver.
                                 movie.setLat(obj.getString("crime_latitude"));
                                 movie.setLng(obj.getString("crime_longitude"));
                                 movie.setAddress(obj.getString("crime_location_address"));
-                                // adding movie to movies arraymovie.setTime(obj.getString("crime_time"));
-                                crimeList.add(movie);
 
+                                crimeList.add(movie);
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-
                         }
-
-                        // notifying list adapter about data changes
-                        // so that it renders the list view with updated data
                         adapter.notifyDataSetChanged();
                     }
                 }, new Response.ErrorListener() {
@@ -134,16 +129,14 @@ public class CrimeListFragment extends Fragment implements ConnectivityReceiver.
             }
         });
 
-        // Adding request to request queue
         AppController.getInstance().addToRequestQueue(movieReq);
         return v;
     }
 
     private void shuffle() {
-
-
         adapter = new CustomListAdapter(getActivity(), crimeList);
         listView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
@@ -156,7 +149,6 @@ public class CrimeListFragment extends Fragment implements ConnectivityReceiver.
             color = Color.RED;
 
             Snackbar snackbar = Snackbar.make(v.findViewById(R.id.crimeListFragment), message, Snackbar.LENGTH_LONG);
-
             View sbView = snackbar.getView();
             TextView textView = sbView.findViewById(android.support.design.R.id.snackbar_text);
             textView.setTextColor(color);

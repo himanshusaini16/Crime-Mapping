@@ -8,42 +8,41 @@
     android:focusableInTouchMode="true">
 
     <LinearLayout
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="3dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:orientation="vertical">
 
         <TextView
-            android:layout_marginLeft="10dp"
-            android:textSize="20sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:text="@string/layout_addcrime_crimetype"
             android:textColor="@color/black"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <Spinner
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="20dp"
             android:id="@+id/spinner_crimetype"
             android:layout_width="match_parent"
             android:layout_height="100dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
             android:drawSelectorOnTop="true"
             android:prompt="@string/prompt_selecione_crime" />
 
         <TextView
-            android:layout_margin="10dp"
-            android:textSize="15sp"
-            android:textColor="@color/black"
-            android:text="@string/layout_addcrime_desciption"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/layout_addcrime_desciption"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
 
 
         <EditText
-            android:textCursorDrawable="@drawable/color_cursor"
             android:id="@+id/EditCrime"
             android:layout_width="match_parent"
             android:layout_height="100dp"
@@ -53,9 +52,11 @@
             android:gravity="top|left"
             android:inputType="text|textCapCharacters|textCapWords|textCapSentences|textAutoCorrect|textAutoComplete|textMultiLine|textImeMultiLine|textNoSuggestions|textUri|textEmailAddress|textEmailSubject|textShortMessage|textLongMessage|textPersonName|textPostalAddress|textPassword|textVisiblePassword|textWebEditText|textFilter|textWebEmailAddress|textWebPassword"
             android:maxLength="300"
+            android:nextFocusDown="@+id/EditDateCrime"
             android:padding="2dp"
             android:textColor="@color/black"
-            android:textColorHint="@color/grey" />
+            android:textColorHint="@color/grey"
+            android:textCursorDrawable="@drawable/color_cursor" />
 
 
         <LinearLayout
@@ -64,12 +65,12 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="20dp"
                 android:id="@+id/imageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/ic_date_range_black_24dp" />
 
             <LinearLayout
@@ -78,22 +79,23 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_marginTop="20dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
                     android:text="@string/layout_addcrime_date"
                     android:textColor="@color/black" />
 
                 <EditText
-                    android:textCursorDrawable="@drawable/color_cursor"
-                    android:onClick="openDatePicker"
-                    android:layout_marginRight="25dp"
-                    android:layout_marginTop="20dp"
                     android:id="@+id/EditDateCrime"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginTop="20dp"
+                    android:nextFocusDown="@+id/EditTimeCrime"
+                    android:onClick="openDatePicker"
+                    android:singleLine="true"
                     android:textColor="@color/black"
-                   />
+                    android:textCursorDrawable="@drawable/color_cursor" />
             </LinearLayout>
         </LinearLayout>
 
@@ -103,11 +105,11 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/ic_alarm_black_24dp" />
 
             <LinearLayout
@@ -116,22 +118,23 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_marginTop="20dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
                     android:text="@string/layout_addcrime_time"
                     android:textColor="@color/black" />
 
                 <EditText
-                    android:textCursorDrawable="@drawable/color_cursor"
-                    android:onClick="openTimePicker"
-                    android:layout_marginRight="25dp"
-                    android:layout_marginTop="20dp"
+
                     android:id="@+id/EditTimeCrime"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginTop="20dp"
+                    android:onClick="openTimePicker"
+                    android:singleLine="true"
                     android:textColor="@color/black"
-                    />
+                    android:textCursorDrawable="@drawable/color_cursor" />
 
 
             </LinearLayout>
