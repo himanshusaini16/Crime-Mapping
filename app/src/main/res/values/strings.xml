@@ -82,8 +82,8 @@
     <string name="crime_animal_desc">Cruelty and maltreatment of animals</string>
     <string name="adddd">Add</string>
     <string name="crime_descriptionnn">Crime Description:</string>
-    <string name="dateee">Date:</string>
-    <string name="timeee">Time:</string>
+    <string name="dateee">Crime date:</string>
+    <string name="timeee">Crime time:</string>
     <string name="coordinatess">Coordinates:</string>
     <string name="info_title">About Crime Mapping…</string>
     <string name="info_message">Crime Mapping is an Android Application to generate real time Crime Maps.Users can select any coordinate from map and can post crime details online. \n\nAll rights reserved.We are not responsible for any damages incurred from using this application. This application and

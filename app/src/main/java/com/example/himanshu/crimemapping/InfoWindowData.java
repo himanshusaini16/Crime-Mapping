@@ -44,19 +44,19 @@ public class InfoWindowData {
     }
 
     public String getDateReported() {
-        return date_info;
+        return date_info_reported;
     }
 
     public void setDateReported(String foodey) {
-        this.date_info = foodey;
+        this.date_info_reported = foodey;
     }
 
     public String getTimeReported() {
-        return time_info;
+        return time_info_reported;
     }
 
     public void setTimeReported(String transporty) {
-        this.time_info = transporty;
+        this.time_info_reported = transporty;
     }
 
 }
