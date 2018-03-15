@@ -33,9 +33,16 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/Share"
+        android:id="@+id/Feedback"
         android:orderInCategory="50"
+        android:title="@string/feedback_app"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/Share"
+        android:orderInCategory="60"
         android:title="@string/share"
         app:showAsAction="never" />
+
 
 </menu>

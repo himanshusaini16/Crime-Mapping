@@ -110,6 +110,7 @@
     <string name="name_password">New Password:</string>
     <string name="update_profile">Update</string>
     <string name="reported_on">Reported On:</string>
+    <string name="feedback_app">Feedback</string>
 
 
 </resources>

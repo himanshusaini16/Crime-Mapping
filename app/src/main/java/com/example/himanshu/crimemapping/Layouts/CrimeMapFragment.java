@@ -240,6 +240,16 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
                 break;
 
 
+            case R.id.Feedback:
+                Intent email = new Intent(Intent.ACTION_SEND);
+                email.putExtra(Intent.EXTRA_EMAIL, new String[]{"himanshusaini299@gmail.com"});
+                email.putExtra(Intent.EXTRA_SUBJECT, "(Crime Mapping) User Feedback:");
+                email.setType("message/rfc822");
+                startActivity(Intent.createChooser(email, "Send Email:"));
+                break;
+
+
+
             default:
                 return super.onOptionsItemSelected(item);
         }
