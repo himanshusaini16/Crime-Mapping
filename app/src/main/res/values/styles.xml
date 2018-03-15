@@ -67,6 +67,15 @@
     </style>
 
 
+    <style name="Custom4" parent="android:Theme.DeviceDefault.Dialog">
+        <item name="DialogTitleAppearance">@android:style/TextAppearance.Medium</item>
+        <item name="DialogTitleText">Updating Profile.....</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="DialogSpotColor">@color/white</item>
+        <item name="DialogSpotCount">8</item>
+    </style>
+
 
     <style name="datepicker" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorPrimary">@color/colorApplication</item>

@@ -65,6 +65,8 @@ public class SplashActivity extends AppCompatActivity implements ConnectivityRec
 
         registerReceiver(connectivityReceiver, intentFilter);
 
+        unregisterReceiver(connectivityReceiver);
+
 
         MyApplication.getInstance().setConnectivityListener(this);
     }

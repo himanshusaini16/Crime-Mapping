@@ -3,16 +3,17 @@ package com.example.himanshu.crimemapping;
 public class Crime_UserRelated {
 
 
-    private String type, thumbnailUrl, descrip, address;
+    private String type, thumbnailUrl, descrip, address, reportdate;
 
     public Crime_UserRelated() {
     }
 
-    public Crime_UserRelated(String type1, String thumbnailUrl1, String descrip1, String address1) {
+    public Crime_UserRelated(String type1, String thumbnailUrl1, String descrip1, String address1, String reportdate1) {
         this.type = type1;
         this.thumbnailUrl = thumbnailUrl1;
         this.descrip = descrip1;
         this.address = address1;
+        this.reportdate = reportdate1;
     }
 
     public String getTitleUser() {
@@ -45,6 +46,14 @@ public class Crime_UserRelated {
 
     public void setAddressUser(String address1) {
         this.address = address1;
+    }
+
+    public String getReportedDateUser() {
+        return reportdate;
+    }
+
+    public void setReportedDateUser(String reportdate1) {
+        this.reportdate = reportdate1;
     }
 
 

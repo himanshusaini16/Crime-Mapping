@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import com.example.himanshu.crimemapping.R;
 import com.google.android.gms.ads.MobileAds;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 
 public class BottomNavigationHomeActivity extends AppCompatActivity {
@@ -23,18 +24,10 @@ public class BottomNavigationHomeActivity extends AppCompatActivity {
 
         MobileAds.initialize(this, "ca-app-pub-4510895115386086~4521143649");
 
+
         setupNavigationView();
 
-
     }
-
-  /*  @Override
-    public void sendData(String m1, String m2) {
-        FragmentManager fm = getFragmentManager();
-        CrimeMapFragment frag = (CrimeMapFragment) fm.findFragmentById(R.id.crimeMapFragment);
-
-        frag.recieveData(m1,m2);
-    }*/
 
 
     private void setupNavigationView() {

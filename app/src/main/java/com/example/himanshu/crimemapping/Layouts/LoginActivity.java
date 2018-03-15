@@ -38,7 +38,6 @@ import dmax.dialog.SpotsDialog;
 public class LoginActivity extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
 
 
-    private static final String TAG = "";
     Button loginButton;
     EditText loginUserName, loginPassword;
     String lnemail, lnpassword;

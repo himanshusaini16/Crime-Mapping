@@ -102,9 +102,14 @@
     <string name="invalid_crime_description">Please enter some crime description</string>
     <string name="invalid_date">Please select crime date</string>
     <string name="invalid_time">Please select crime time</string>
-    <string name="change_dp">Change Profile Picture</string>
-    <string name="remove_dp">Remove Profile Picture</string>
+    <string name="change_dp">Change Picture</string>
+    <string name="remove_dp">Remove Picture</string>
     <string name="my_reported_crimes"><u>My Reported Crimes:</u></string>
+    <string name="name_editProfile">Name:</string>
+    <string name="name_email">Email:</string>
+    <string name="name_password">New Password:</string>
+    <string name="update_profile">Update</string>
+    <string name="reported_on">Reported On:</string>
 
 
 </resources>

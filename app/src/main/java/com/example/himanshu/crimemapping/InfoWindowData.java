@@ -7,6 +7,8 @@ public class InfoWindowData {
     private String description_info;
     private String date_info;
     private String time_info;
+    private String date_info_reported;
+    private String time_info_reported;
 
 
     public String getHeading() {
@@ -39,6 +41,22 @@ public class InfoWindowData {
 
     public void setTime(String transport) {
         this.time_info = transport;
+    }
+
+    public String getDateReported() {
+        return date_info;
+    }
+
+    public void setDateReported(String foodey) {
+        this.date_info = foodey;
+    }
+
+    public String getTimeReported() {
+        return time_info;
+    }
+
+    public void setTimeReported(String transporty) {
+        this.time_info = transporty;
     }
 
 }

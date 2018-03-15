@@ -1,8 +1,11 @@
 package com.example.himanshu.crimemapping.Layouts;
 
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -17,6 +20,7 @@ import android.support.design.widget.Snackbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -61,7 +65,10 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,6 +91,8 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
     String deleteRow;
     ListView listView;
 
+    java.util.Date date1, date2;
+
     private static final String TAG = UserProfileFragment.class.getSimpleName();
     private static final String url = "http://thetechnophile.000webhostapp.com/load_crime_UserRelated.json";
     private List<Crime_UserRelated> UserCrimeList = new ArrayList<>();
@@ -94,6 +103,7 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
     private Context mContext;
     private PopupWindow popupWindow;
     RelativeLayout mRelativeLayout;
+    String currentDateForCheck, dateFromServer;
 
     SharedPreferences userDataSharedPreferenceSignup, userDataSharedPreferenceLogin;
 
@@ -104,6 +114,7 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
     public static final String UserDataName = "nameKey";
 
     Button changeDPicture, removeDPicture;
+    AlertDialog.Builder alertDialogBuilder;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -115,12 +126,13 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
 
         upName = v.findViewById(R.id.UserProfileName);
 
+
         userDataSharedPreferenceLogin = getContext().getSharedPreferences(mypreferencethisislogin, Context.MODE_PRIVATE);
         userDataSharedPreferenceSignup = getContext().getSharedPreferences(mypreferencethisissignup, Context.MODE_PRIVATE);
 
 
         if (userDataSharedPreferenceLogin.contains(UserDataEmail)) {
-            upName.setText(userDataSharedPreferenceLogin.getString(UserDataEmail, ""));
+//            upName.setText(userDataSharedPreferenceLogin.getString(UserDataEmail, ""));
             userEmail = userDataSharedPreferenceLogin.getString(UserDataEmail, "");
         }
 
@@ -131,6 +143,9 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
             userEmail = userDataSharedPreferenceSignup.getString(UserDataEmail, "");
         }
 
+        Calendar calendar = Calendar.getInstance();
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat mdformat = new SimpleDateFormat("dd/MM/yyyy ");
+        currentDateForCheck = mdformat.format(calendar.getTime());
 
         listView = v.findViewById(R.id.Userprofile_crimeList);
         adapter = new Custom_UserListAdapter(getActivity(), UserCrimeList);
@@ -139,9 +154,15 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Crime_UserRelated ss = (Crime_UserRelated) listView.getItemAtPosition(position);
-                deleteRow = ss.getDesUser();
-                UserCrimeList.remove(position);
+                try {
+                    Crime_UserRelated ss = (Crime_UserRelated) listView.getItemAtPosition(position);
+                    deleteRow = ss.getDesUser();
+                    dateFromServer = ss.getReportedDateUser();
+                    UserCrimeList.remove(position);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 return false;
             }
         });
@@ -179,6 +200,7 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
                                 ucrime.setThumbnailUrlUser(obj.getString("crime_image_marker"));
                                 ucrime.setDesUser(obj.getString("crime_description"));
                                 ucrime.setAddressUser(obj.getString("crime_location_address"));
+                                ucrime.setReportedDateUser(obj.getString("crime_reporting_date"));
 
                                 UserCrimeList.add(ucrime);
                             } catch (JSONException e) {
@@ -275,7 +297,35 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getTitle() == "Delete") {
-            functionToDelete();
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+
+            try {
+                date1 = formatter.parse(dateFromServer);
+                date2 = formatter.parse(currentDateForCheck);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            long difference = Math.abs(date2.getTime() - date1.getTime());
+            long differenceDates = difference / (24 * 60 * 60 * 1000);
+            if (differenceDates > 7) {
+                functionToDelete();
+            } else {
+                alertDialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), android.R.style.Theme_DeviceDefault_Light));
+                alertDialogBuilder.setTitle("You Can't Delete It");
+                alertDialogBuilder.setMessage("Crimes can only be deleted after 7 days of posting.");
+                alertDialogBuilder.setCancelable(false);
+                alertDialogBuilder.setIcon(R.drawable.ic_error_alert);
+                alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                alertDialogBuilder.show();
+            }
+
+
         }
         return super.onContextItemSelected(item);
     }
@@ -340,7 +390,8 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
 
 
             case R.id.userProfileEditButton:
-                Toast.makeText(getActivity(), "Edit", Toast.LENGTH_SHORT).show();
+                Intent op = new Intent(getActivity(), EditUserProfile.class);
+                startActivity(op);
                 break;
 
             default:

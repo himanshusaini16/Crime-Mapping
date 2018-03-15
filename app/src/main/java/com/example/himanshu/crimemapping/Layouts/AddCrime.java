@@ -40,10 +40,13 @@ import com.example.himanshu.crimemapping.R;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.TimeZone;
 
 import dmax.dialog.SpotsDialog;
 
@@ -54,7 +57,7 @@ public class AddCrime extends AppCompatActivity {
     String format, cmmm = ".png";
     Intent s1;
     private AwesomeValidation awesomeValidation;
-    String crime_type_final, crime_date_final, crime_time_final, crime_description_final;
+    String crime_type_final, crime_date_final, crime_time_final, crime_description_final, currentDate;
     private AlertDialog progressDialog;
     private static final String TAG = "";
     String marker_images_URL = "http://thetechnophile.000webhostapp.com/markers-images/";
@@ -66,6 +69,9 @@ public class AddCrime extends AppCompatActivity {
     public static final String UserDataEmail = "emailKey";
 
     private Random random = new Random();
+
+    private java.util.Date currentLocalTime;
+    private String localTime;
 
     int crime_images[] = {R.drawable.icon_big_robbery, R.drawable.icon_big_moto, R.drawable.icon_big_car, R.drawable.icon_big_hijacking,
             R.drawable.icon_big_robandkill, R.drawable.icon_big_drugs
@@ -145,6 +151,18 @@ public class AddCrime extends AppCompatActivity {
                 crime_images_marker_final = (marker_images_URL + (i + 1)).concat(cmmm);
 
                 crime_type_final = getResources().getString(crime_heading[i]);
+
+//Select Current Date of Reporting the Crime
+                Calendar calendar = Calendar.getInstance();
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat mdformat = new SimpleDateFormat("dd/MM/yyyy ");
+                currentDate = mdformat.format(calendar.getTime());
+
+//Select Current Time of Reporting the Crime
+                Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT+5:30"));
+                currentLocalTime = cal.getTime();
+                @SuppressLint("SimpleDateFormat") DateFormat date = new SimpleDateFormat("KK:mm a");
+                date.setTimeZone(TimeZone.getTimeZone("GMT+5:30"));
+                localTime = date.format(currentLocalTime);
 
 
             }
@@ -252,6 +270,8 @@ public class AddCrime extends AppCompatActivity {
                 params.put("crime_latitude", crime_latitude_final);
                 params.put("crime_longitude", crime_longitude_final);
                 params.put("crime_location_address", crime_location_address_final);
+                params.put("crime_reporting_date", currentDate);
+                params.put("crime_reporting_time", localTime);
 
                 return params;
             }
@@ -283,6 +303,7 @@ public class AddCrime extends AppCompatActivity {
                                           int monthOfYear, int dayOfMonth) {
                         Date.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
                         crime_date_final = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+
                     }
                 }, mYear, mMonth, mDay);
 

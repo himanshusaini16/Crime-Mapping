@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:id="@+id/EditingProfile"
+    android:focusableInTouchMode="true"
+    tools:context="com.example.himanshu.crimemapping.Layouts.EditUserProfile">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_viewEditProfile"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center"
+        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/nameProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/name_editProfile"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <EditText
+                android:textCursorDrawable="@drawable/color_cursor"
+                android:inputType="textAutoCorrect|textAutoComplete|text"
+                android:id="@+id/EditTextName"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@id/nameProfile"
+                android:layout_marginEnd="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/nameEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/EditTextName"
+                android:layout_marginEnd="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/name_email"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <EditText
+
+                android:textCursorDrawable="@drawable/color_cursor"
+                android:inputType="none"
+                android:id="@+id/EditTextEmail"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@id/nameEmail"
+                android:layout_marginEnd="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/namePassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/EditTextEmail"
+                android:layout_marginEnd="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/name_password"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <EditText
+                android:textCursorDrawable="@drawable/color_cursor"
+                android:inputType="textPassword"
+                android:id="@+id/EditTextPassword"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@id/namePassword"
+                android:layout_marginEnd="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/black" />
+
+            <Button
+                android:id="@+id/info_update"
+                android:layout_marginEnd="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="50dp"
+                android:textColor="@color/white"
+                android:background="@color/colorApplication"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@id/EditTextPassword"
+                android:text="@string/update_profile" />
+
+        </RelativeLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+
+</RelativeLayout>

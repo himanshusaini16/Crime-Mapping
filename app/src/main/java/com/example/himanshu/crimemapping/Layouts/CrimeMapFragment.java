@@ -67,9 +67,11 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.yarolegovich.lovelydialog.LovelyInfoDialog;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -93,6 +95,7 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
     Marker mCurrLocationMarker;
     LatLng latLngLoc, mClickPos;
     String place_searched;
+    LatLng center;
 
 
     private static final String url = "http://thetechnophile.000webhostapp.com/load_crime.json";
@@ -113,6 +116,12 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
 
         setHasOptionsMenu(true);
         return v;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setRetainInstance(true);
     }
 
     @Override
@@ -259,7 +268,6 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
     }
 
 
-
     @Override
     public void onMapReady(final GoogleMap googleMap) {
 
@@ -297,8 +305,6 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
 
         CameraPosition position1 = CameraPosition.builder().target(new LatLng(26.9124, 75.7873)).zoom(10).bearing(0).build();
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(position1));
-
-
         googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
             @Override
             public void onMarkerDragStart(Marker marker) {
@@ -423,7 +429,8 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
                         idata.setDescription(obj.getString("crime_description"));
                         idata.setDate(obj.getString("crime_date"));
                         idata.setTime(obj.getString("crime_time"));
-
+                        idata.setDateReported(obj.getString("crime_reporting_date"));
+                        idata.setTimeReported(obj.getString("crime_reporting_time"));
 
                         Marker m = mMap.addMarker(markerOptions);
                         m.setTag(idata);

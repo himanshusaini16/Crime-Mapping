@@ -1,94 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="250dp"
-    android:layout_height="wrap_content">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/popup_bg_info">
 
-    <TextView
-        android:id="@+id/infowindow_heading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+    <RelativeLayout
+        android:layout_width="270dp"
+        android:layout_height="wrap_content">
 
-    <View
-        android:layout_width="300dp"
-        android:layout_height="1dp"
-        android:layout_below="@+id/infowindow_heading"
-        android:layout_marginTop="2dp"
-        android:background="@color/black" />
+        <TextView
+            android:id="@+id/infowindow_heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/likhahua"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/infowindow_heading"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp"
-        android:text="@string/crime_descriptionnn"
-        android:textColor="@color/black"
-        android:textSize="15sp" />
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/infowindow_heading"
+            android:layout_marginTop="2dp"
+            android:background="@color/black" />
+
+        <TextView
+            android:id="@+id/likhahua"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/infowindow_heading"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/crime_descriptionnn"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
 
 
-    <TextView
-        android:id="@+id/infowindow_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/likhahua"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="1dp"
-        android:maxLength="300"
-        android:maxWidth="250dp"
-        android:textSize="12sp" />
+        <TextView
+            android:id="@+id/infowindow_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/likhahua"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="1dp"
+            android:maxLength="300"
+            android:maxWidth="350dp"
+            android:textSize="12sp" />
 
-    <TextView
-        android:id="@+id/firselikhahua"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/infowindow_description"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="3dp"
-        android:text="@string/dateee"
-        android:textColor="@color/black"
-        android:textSize="15sp" />
+        <TextView
+            android:id="@+id/firselikhahua"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/infowindow_description"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="1dp"
+            android:text="@string/dateee"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
 
-    <TextView
-        android:id="@+id/infowindow_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/infowindow_description"
-        android:layout_marginLeft="2dp"
-        android:layout_marginTop="6dp"
-        android:layout_toRightOf="@+id/firselikhahua"
-        android:maxLength="300"
+        <TextView
+            android:id="@+id/infowindow_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/infowindow_description"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="3dp"
+            android:layout_toRightOf="@+id/firselikhahua"
+            android:maxLength="300"
+            android:textSize="12sp" />
 
-        android:textSize="12sp" />
+        <TextView
+            android:id="@+id/timelikhahua"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/infowindow_date"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="1dp"
+            android:text="@string/timeee"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
 
-    <TextView
-        android:id="@+id/timelikhahua"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/infowindow_date"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="3dp"
-        android:text="@string/timeee"
-        android:textColor="@color/black"
-        android:textSize="15sp" />
+        <TextView
+            android:id="@+id/infowindow_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/infowindow_date"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="3dp"
+            android:layout_toRightOf="@+id/timelikhahua"
+            android:maxLength="300"
+            android:textSize="12sp" />
 
-    <TextView
-        android:id="@+id/infowindow_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/infowindow_date"
-        android:layout_marginLeft="2dp"
-        android:layout_marginTop="6dp"
-        android:layout_toRightOf="@+id/timelikhahua"
-        android:maxLength="300"
-        android:textSize="12sp" />
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/infowindow_time"
+            android:layout_marginTop="3dp"
+            android:background="@color/black" />
 
+
+        <TextView
+            android:id="@+id/reportedonlikhahua"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/infowindow_time"
+            android:layout_marginBottom="1dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:foregroundGravity="right"
+            android:text="@string/reported_on"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+
+        <TextView
+            android:id="@+id/infowindow_reportedon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/infowindow_time"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="7dp"
+            android:layout_toRightOf="@id/reportedonlikhahua"
+            android:maxLength="30"
+            android:textSize="12sp" />
+    </RelativeLayout>
 
 </RelativeLayout>
  
