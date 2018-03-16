@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -80,6 +81,7 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
     public static final String mypreferencethisissignup = "myprefSignup";
     public static final String UserDataEmail = "emailKey";
     public static final String UserDataName = "nameKey";
+    public static final String UserDataPassword = "passwordKey";
 
     SharedPreferences sp;
     SharedPreferences.Editor ep;
@@ -241,6 +243,7 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
             SharedPreferences.Editor ed = userDataSharedPreferenceSignup.edit();
             ed.putString(UserDataName, uname);
             ed.putString(UserDataEmail, uemail);
+            ed.putString(UserDataPassword, upasswd);
             ed.apply();
 
         }
@@ -303,6 +306,8 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
                 SharedPreferences.Editor ed = userDataSharedPreferenceSignup.edit();
                 ed.putString(UserDataName, bb);
                 ed.putString(UserDataEmail, aa);
+                ed.putString(UserDataPassword, "");
+
                 ed.apply();
 
 

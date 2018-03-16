@@ -51,13 +51,14 @@ public class EditUserProfile extends AppCompatActivity implements ConnectivityRe
     public static final String mypreferencethisissignup = "myprefSignup";
     public static final String UserDataEmail = "emailKey";
     public static final String UserDataName = "nameKey";
+    public static final String UserDataPassword = "passwordKey";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_user_profile);
 
-        awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
+//        awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
 
         editName = findViewById(R.id.EditTextName);
         editEmail = findViewById(R.id.EditTextEmail);
@@ -99,7 +100,7 @@ public class EditUserProfile extends AppCompatActivity implements ConnectivityRe
 
     private void updateUserProfile() {
 
-        addValidationToViews();
+//        addValidationToViews();
         authenticate();
 
         RequestQueue queue = Volley.newRequestQueue(EditUserProfile.this);
@@ -149,24 +150,28 @@ public class EditUserProfile extends AppCompatActivity implements ConnectivityRe
         return true;
     }
 
-    private void addValidationToViews() {
-        awesomeValidation.addValidation(this, R.id.EditTextName, RegexTemplate.NOT_EMPTY, R.string.invalid_name);
-        String regexPassword = ".{6,}";
-        awesomeValidation.addValidation(this, R.id.EditTextPassword, regexPassword, R.string.invalid_password);
-    }
+//    private void addValidationToViews() {
+//        awesomeValidation.addValidation(this, R.id.EditTextName, RegexTemplate.NOT_EMPTY, R.string.invalid_name);
+//        String regexPassword = ".{6,}";
+//        awesomeValidation.addValidation(this, R.id.EditTextPassword, regexPassword, R.string.invalid_password);
+//    }
 
 
     public void authenticate() {
 
-        if (awesomeValidation.validate()) {
+//        if (awesomeValidation.validate())
             finalName = editName.getText().toString();
             finalPassword = editPass.getText().toString();
+        if (finalPassword.isEmpty()) {
+            finalPassword = userDataSharedPreferenceSignup.getString(UserDataPassword, "");
+        }
 
             SharedPreferences.Editor ed = userDataSharedPreferenceSignup.edit();
             ed.putString(UserDataName, finalName);
+        ed.putString(UserDataPassword, finalPassword);
             ed.apply();
 
-        }
+//        }
         progressDialog = new SpotsDialog(EditUserProfile.this, R.style.Custom4);
         progressDialog.show();
     }

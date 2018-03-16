@@ -48,6 +48,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
 
     public static final String mypreferencethisislogin = "myprefLogin";
     public static final String UserDataEmail = "emailKey";
+    public static final String UserDataPassword = "passwordKey";
 
 
     @Override
@@ -140,6 +141,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
 
             SharedPreferences.Editor ed = userDataSharedPreferenceLogin.edit();
             ed.putString(UserDataEmail, lnemail);
+            ed.putString(UserDataPassword, lnpassword);
             ed.apply();
         }
         progressDialog = new SpotsDialog(LoginActivity.this, R.style.Custom0);
