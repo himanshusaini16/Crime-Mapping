@@ -21,6 +21,8 @@ android {
     }
 }
 
+
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -53,7 +55,10 @@ dependencies {
     compile 'com.mikhaellopez:circularimageview:3.0.0'
     implementation 'com.basgeekball:awesome-validation:2.0'
 
+
+
 }
 
 
 apply plugin: 'com.google.gms.google-services'
+

@@ -384,7 +384,7 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
                 userDataSharedPreferenceSignup.edit().remove(UserDataEmail).apply();
                 userDataSharedPreferenceLogin.edit().remove(UserDataEmail).apply();
                 Intent ss = new Intent(getActivity(), LoginActivity.class);
-                ss.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                ss.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(ss);
                 break;
 

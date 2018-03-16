@@ -17,7 +17,7 @@
     <string name="about_us">About Us</string>
     <string name="share">Share</string>
     <string name="refresh">Refresh</string>
-    <string name="search">Search Location...</string>
+    <string name="search">Search Location…</string>
     <string name="title_activity_crime_mapping_login">Sign in</string>
 
     <!-- Strings related to login -->
