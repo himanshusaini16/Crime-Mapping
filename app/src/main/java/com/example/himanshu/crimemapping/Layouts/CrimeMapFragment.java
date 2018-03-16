@@ -55,6 +55,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -199,7 +200,8 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
             Address address = addressList.get(0);
             LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
             mMap.addMarker(new MarkerOptions().position(latLng).title("Searched Location"));
-            mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng), 3000, null);
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15), 2000, null);
+
         }
     }
 
@@ -315,33 +317,7 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
 
         CameraPosition position1 = CameraPosition.builder().target(new LatLng(26.9124, 75.7873)).zoom(10).bearing(0).build();
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(position1));
-        googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-            @Override
-            public void onMarkerDragStart(Marker marker) {
-                Log.d("System out", "onMarkerDragStart..." + marker.getPosition().latitude + "..." + marker.getPosition().longitude);
-                marker.setSnippet("");
-            }
 
-            @Override
-            public void onMarkerDrag(Marker marker) {
-                Log.i("System out", "onMarkerDrag...");
-                marker.setSnippet("(" + marker.getPosition().latitude + "," + marker.getPosition().longitude + ")");
-            }
-
-            @Override
-            public void onMarkerDragEnd(Marker marker) {
-                Log.d("System out", "onMarkerDragEnd..." + marker.getPosition().latitude + "..." + marker.getPosition().longitude);
-
-                googleMap.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
-            }
-        });
-
-
-        googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(26.9124, 75.7873))
-                .draggable(true)
-                .flat(true)
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
 
         loadMarkersOnMap();

@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -56,6 +58,8 @@ public class AddCrime extends AppCompatActivity {
     EditText cr_des;
     String format, cmmm = ".png";
     Intent s1;
+
+    AlertDialog.Builder alertDialogBuilder;
     private AwesomeValidation awesomeValidation;
     String crime_type_final, crime_date_final, crime_time_final, crime_description_final, currentDate;
     private AlertDialog progressDialog;
@@ -194,41 +198,61 @@ public class AddCrime extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_addcrime) {
-            addCrimeToDatabase();
+
+            alertDialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(AddCrime.this, android.R.style.Theme_DeviceDefault_Light));
+            alertDialogBuilder.setTitle("Are you Sure?");
+            alertDialogBuilder.setMessage("Once Crime is posted on map, it cannot be deleted within a period of 1 week.");
+            alertDialogBuilder.setCancelable(false);
+            alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    AddCrime.this.finish();
+
+                }
+            });
+            alertDialogBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                    AddCrime.this.addCrimeToDatabase();
+                }
+            });
+            alertDialogBuilder.show();
+
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
 
-    private void firebaseUpstream() {
-        FirebaseMessaging fm = FirebaseMessaging.getInstance();
+//    private void firebaseUpstream() {
+//        FirebaseMessaging fm = FirebaseMessaging.getInstance();
+//
+//        String SENDER_ID = "535718128844";
+//        RemoteMessage message = new RemoteMessage.Builder(SENDER_ID + "@gcm.googleapis.com")
+//                .setMessageId(Integer.toString(random.nextInt(9999)))
+//                .addData("Heading", "Crime Mapping")
+//                .addData("crime_sentence", "A new Crime is Added to The Map.")
+//                .addData("Crime_Type", crime_type_final)
+//                .build();
+//
+//        if (!message.getData().isEmpty()) {
+//            Log.e(TAG, "UpstreamData: " + message.getData());
+//        }
+//
+//        if (!message.getMessageId().isEmpty()) {
+//            Log.e(TAG, "UpstreamMessageId: " + message.getMessageId());
+//        }
+//
+//        fm.send(message);
+//    }
 
-        String SENDER_ID = "535718128844";
-        RemoteMessage message = new RemoteMessage.Builder(SENDER_ID + "@gcm.googleapis.com")
-                .setMessageId(Integer.toString(random.nextInt(9999)))
-                .addData("Heading", "Crime Mapping")
-                .addData("crime_sentence", "A new Crime is Added to The Map.")
-                .addData("Crime_Type", crime_type_final)
-                .build();
 
-        if (!message.getData().isEmpty()) {
-            Log.e(TAG, "UpstreamData: " + message.getData());
-        }
-
-        if (!message.getMessageId().isEmpty()) {
-            Log.e(TAG, "UpstreamMessageId: " + message.getMessageId());
-        }
-
-        fm.send(message);
-    }
-
-
-    private void addCrimeToDatabase() {
+    public void addCrimeToDatabase() {
         addValidationToViews();
         authenticate();
 
-        firebaseUpstream();
+//        firebaseUpstream();
 
         RequestQueue queue = Volley.newRequestQueue(AddCrime.this);
 
@@ -239,11 +263,10 @@ public class AddCrime extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
 
-
-                if (response.equals("Successfully Added Crime Details to Database")) {
+                if (response.equals("Added")) {
                     progressDialog.hide();
                     s1 = new Intent(AddCrime.this, BottomNavigationHomeActivity.class);
-                    s1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    s1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(s1);
                     finish();
 

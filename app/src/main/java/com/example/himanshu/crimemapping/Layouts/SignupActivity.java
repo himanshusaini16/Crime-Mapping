@@ -67,7 +67,7 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
     GoogleSignInClient mGoogleSignInClient;
     private AwesomeValidation awesomeValidation;
 
-
+    String aa, bb;
     private AlertDialog progressDialog;
     Intent s1;
     FirebaseAuth mAuth;
@@ -296,10 +296,14 @@ public class SignupActivity extends AppCompatActivity implements ConnectivityRec
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
                 account11 = result.getSignInAccount();
-
-                String aa = account11.getEmail();
-                String bb = account11.getDisplayName();
+                aa = account11.getEmail();
+                bb = account11.getDisplayName();
                 saveLoginDetails(aa, bb);
+
+                SharedPreferences.Editor ed = userDataSharedPreferenceSignup.edit();
+                ed.putString(UserDataName, bb);
+                ed.putString(UserDataEmail, aa);
+                ed.apply();
 
 
                 //authenticating with firebase
