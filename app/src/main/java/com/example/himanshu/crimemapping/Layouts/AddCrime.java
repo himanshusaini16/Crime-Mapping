@@ -39,6 +39,8 @@ import com.basgeekball.awesomevalidation.utility.RegexTemplate;
 import com.example.himanshu.crimemapping.CustomAdapter;
 import com.example.himanshu.crimemapping.LocationAddress;
 import com.example.himanshu.crimemapping.R;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -58,6 +60,8 @@ public class AddCrime extends AppCompatActivity {
     EditText cr_des;
     String format, cmmm = ".png";
     Intent s1;
+
+    private InterstitialAd mInterstitialAd;
 
     AlertDialog.Builder alertDialogBuilder;
     private AwesomeValidation awesomeValidation;
@@ -109,6 +113,11 @@ public class AddCrime extends AppCompatActivity {
                 getApplicationContext(), new GeocoderHandler());
 
         awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
+
+        MobileAds.initialize(this, "ca-app-pub-4510895115386086~4521143649");
+
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-4510895115386086/3390244359");
 
         userDataSharedPreferenceLogin = getSharedPreferences(mypreferencethisislogin, Context.MODE_PRIVATE);
         userDataSharedPreferenceSignup = getSharedPreferences(mypreferencethisissignup, Context.MODE_PRIVATE);
@@ -301,6 +310,10 @@ public class AddCrime extends AppCompatActivity {
         };
         postRequest.setRetryPolicy(new DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         queue.add(postRequest);
+
+        if (mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        }
     }
 
 
@@ -330,6 +343,8 @@ public class AddCrime extends AppCompatActivity {
                     }
                 }, mYear, mMonth, mDay);
 
+        Calendar calendar = Calendar.getInstance();
+        datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
         datePickerDialog.setCancelable(false);
         datePickerDialog.setTitle("Select the date:");
         datePickerDialog.show();
@@ -342,6 +357,7 @@ public class AddCrime extends AppCompatActivity {
         TimePickerDialog timePickerDialog = new TimePickerDialog(this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT,
                 new TimePickerDialog.OnTimeSetListener() {
 
+                    @SuppressLint("DefaultLocale")
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay,
                                           int minute) {
@@ -357,8 +373,8 @@ public class AddCrime extends AppCompatActivity {
                         } else {
                             format = "AM";
                         }
-                        Time.setText(hourOfDay + ":" + minute + " " + format);
-                        crime_time_final = hourOfDay + ":" + minute + " " + format;
+                        Time.setText(String.format("%02d:%02d ", hourOfDay, minute) + format);
+                        crime_time_final = (String.format("%02d:%02d ", hourOfDay, minute) + format);
                     }
                 }, mHour, mMinute, false);
         timePickerDialog.setCancelable(false);

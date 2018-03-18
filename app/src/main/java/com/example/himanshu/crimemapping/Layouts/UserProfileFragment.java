@@ -55,6 +55,7 @@ import com.example.himanshu.crimemapping.MyApplication;
 import com.example.himanshu.crimemapping.R;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.auth.FirebaseAuth;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
@@ -78,7 +79,6 @@ import static android.app.Activity.RESULT_OK;
 
 public class UserProfileFragment extends Fragment implements ConnectivityReceiver.ConnectivityReceiverListener {
 
-    AdView mAdView;
     View v;
     FirebaseAuth mAuth;
     private static int RESULT_LOAD_IMAGE = 1;
@@ -90,6 +90,8 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
     String userEmail;
     String deleteRow;
     ListView listView;
+
+    private AdView mAdView;
 
     java.util.Date date1, date2;
 
@@ -120,6 +122,8 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_user_profile, container, false);
+
+        MobileAds.initialize(getActivity(), "ca-app-pub-4510895115386086/9905404014");
 
         progressBar = v.findViewById(R.id.progressBar);
         loadUserCrimeList();

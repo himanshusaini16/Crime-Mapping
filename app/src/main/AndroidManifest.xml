@@ -56,6 +56,12 @@
             android:resource="@drawable/logonoti" />
 
         <activity
+
+            android:name="com.google.android.gms.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+            android:theme="@android:style/Theme.Translucent" />
+
+        <activity
             android:name=".Layouts.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppFullScreenTheme">
@@ -98,10 +104,6 @@
             </intent-filter>
         </service>
 
-        <activity
-            android:name="com.google.android.gms.ads.AdActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
-            android:theme="@android:style/Theme.Translucent" />
 
         <activity
             android:name=".Layouts.EditUserProfile"

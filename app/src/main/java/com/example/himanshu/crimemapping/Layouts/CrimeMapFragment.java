@@ -35,6 +35,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +50,9 @@ import com.example.himanshu.crimemapping.Crime;
 import com.example.himanshu.crimemapping.InfoWindowData;
 import com.example.himanshu.crimemapping.MyApplication;
 import com.example.himanshu.crimemapping.R;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -98,6 +102,8 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
     String place_searched;
     LatLng center;
 
+    private AdView mAdView;
+
 
     private static final String url = "http://thetechnophile.000webhostapp.com/load_crime.json";
 
@@ -109,6 +115,12 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
                              Bundle savedInstanceState) {
 
         v = inflater.inflate(R.layout.fragment_crime_map, container, false);
+
+        MobileAds.initialize(getActivity(), "ca-app-pub-4510895115386086/5333881416");
+
+        mAdView = v.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
 
         String link = "http://thetechnophile.000webhostapp.com/load_crime.php";
