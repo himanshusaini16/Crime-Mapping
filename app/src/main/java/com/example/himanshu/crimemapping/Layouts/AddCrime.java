@@ -61,43 +61,33 @@ import java.util.TimeZone;
 import dmax.dialog.SpotsDialog;
 
 public class AddCrime extends AppCompatActivity {
-    private String crime_latitude_final, crime_longitude_final, crime_marker_final, crime_images_marker_final, crime_location_address_final, crime_email_final;
+    public static final String mypreferencethisislogin = "myprefLogin";
+    public static final String mypreferencethisissignup = "myprefSignup";
+    public static final String UserDataEmail = "emailKey";
+    public static final String AddCrimesharedpref = "myprefAddCrime";
+    public static final String ListLatAdded = "nameLatAdded";
+    public static final String ListLngAdded = "nameLngAdded";
+    private static final String TAG = "";
     EditText Date, Time;
     EditText cr_des;
     String format, cmmm = ".png";
     Intent s1;
-
-    private InterstitialAd mInterstitialAd;
-
     AlertDialog.Builder alertDialogBuilder;
-    private AwesomeValidation awesomeValidation;
     String crime_type_final, crime_date_final, crime_time_final, crime_description_final, currentDate;
-    private AlertDialog progressDialog;
-    private static final String TAG = "";
     String marker_images_URL = "http://thetechnophile.000webhostapp.com/markers-images/";
     String marker_URL = "http://thetechnophile.000webhostapp.com/markers/";
-
     SharedPreferences userDataSharedPreferenceSignup, userDataSharedPreferenceLogin;
-    public static final String mypreferencethisislogin = "myprefLogin";
-    public static final String mypreferencethisissignup = "myprefSignup";
-    public static final String UserDataEmail = "emailKey";
-
-    private Random random = new Random();
-
-    private java.util.Date currentLocalTime;
-    private String localTime, tag_uemail;
-
+    SharedPreferences AddCrimesp;
+    String AddCrimeLat, AddCrimeLng;
     int crime_images[] = {R.drawable.icon_big_robbery, R.drawable.icon_big_moto, R.drawable.icon_big_car, R.drawable.icon_big_hijacking,
             R.drawable.icon_big_robandkill, R.drawable.icon_big_drugs
             , R.drawable.icon_big_garbage, R.drawable.icon_big_bank, R.drawable.icon_big_homicide, R.drawable.icon_big_loudsound
             , R.drawable.icon_big_sex, R.drawable.icon_big_vandalism, R.drawable.icon_big_police, R.drawable.icon_big_animal,
             R.drawable.icon_big_dangerous_place};
-
     int crime_marker[] = {R.drawable.icon_small_assault, R.drawable.icon_small_moto, R.drawable.icon_small_car, R.drawable.icon_small_hijacking
             , R.drawable.icon_small_robandkill, R.drawable.icon_small_drugs, R.drawable.icon_small_garbage, R.drawable.icon_small_bank
             , R.drawable.icon_small_homicide, R.drawable.icon_small_loudsound, R.drawable.icon_small_sex, R.drawable.icon_small_vandalism
             , R.drawable.icon_small_police, R.drawable.icon_small_animal, R.drawable.icon_small_dangerous};
-
     int[] crime_heading = {R.string.crime_assalt, R.string.crime_moto, R.string.crime_car, R.string.crime_hijack, R.string.crime_robandkill
             , R.string.crime_drugs, R.string.crime_garbage, R.string.crime_bank, R.string.crime_homicide, R.string.crime_loudsound
             , R.string.crime_sex, R.string.crime_vandalism, R.string.crime_police, R.string.crime_animal, R.string.crime_danplace};
@@ -105,16 +95,29 @@ public class AddCrime extends AppCompatActivity {
             , R.string.crime_robandkill_desc, R.string.crime_drugs_desc, R.string.crime_garbage_desc, R.string.crime_bank_desc
             , R.string.crime_homicide_desc, R.string.crime_loudsound_desc, R.string.crime_sex_desc, R.string.crime_vandalism_desc
             , R.string.crime_police_desc, R.string.crime_animal_desc, R.string.crime_danplace_desc};
+    private String crime_latitude_final, crime_longitude_final, crime_marker_final, crime_images_marker_final, crime_location_address_final, crime_email_final;
+    private InterstitialAd mInterstitialAd;
+    private AwesomeValidation awesomeValidation;
+    private AlertDialog progressDialog;
+    private Random random = new Random();
+    private java.util.Date currentLocalTime;
+    private String localTime, tag_uemail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_crime);
 
+        AddCrimesp = getSharedPreferences(AddCrimesharedpref, Context.MODE_PRIVATE);
+
         Intent intent2 = getIntent();
 
         crime_latitude_final = intent2.getStringExtra("lat");
         crime_longitude_final = intent2.getStringExtra("lng");
+
+        AddCrimeLat = intent2.getStringExtra("lat");
+        AddCrimeLng = intent2.getStringExtra("lng");
+
         LocationAddress.getAddressFromLocation(Double.parseDouble(crime_latitude_final), Double.parseDouble(crime_longitude_final),
                 getApplicationContext(), new GeocoderHandler());
 
@@ -235,6 +238,11 @@ public class AddCrime extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
+                    SharedPreferences.Editor ed = AddCrimesp.edit();
+                    ed.putString(ListLatAdded, AddCrimeLat);
+                    ed.putString(ListLngAdded, AddCrimeLng);
+                    ed.apply();
+
                     AddCrime.this.addCrimeToDatabase();
                 }
             });

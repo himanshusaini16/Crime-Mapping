@@ -54,6 +54,7 @@ public class Custom_UserListAdapter extends BaseAdapter {
         TextView heading = convertView.findViewById(R.id.user_crimeheading);
         TextView desc = convertView.findViewById(R.id.user_crimedesc);
         TextView addr = convertView.findViewById(R.id.user_crimeaddress);
+        TextView dddate = convertView.findViewById(R.id.user_crimeaddeddate);
 
 
         Crime_UserRelated ma = crimeItemsUser.get(position);
@@ -65,6 +66,7 @@ public class Custom_UserListAdapter extends BaseAdapter {
         heading.setText(ma.getTitleUser());
         desc.setText(ma.getDesUser());
         addr.setText("Location: " + ma.getAddressUser());
+        dddate.setText("Reported On: " + ma.getReportedDateUser());
 
 
         return convertView;

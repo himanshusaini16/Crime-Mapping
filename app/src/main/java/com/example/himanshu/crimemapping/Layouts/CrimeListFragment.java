@@ -3,7 +3,11 @@ package com.example.himanshu.crimemapping.Layouts;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
@@ -11,7 +15,9 @@ import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -41,23 +47,27 @@ import dmax.dialog.SpotsDialog;
 
 public class CrimeListFragment extends Fragment implements ConnectivityReceiver.ConnectivityReceiverListener {
 
-    View v;
-
+    public static final String crimelistsharedpref = "myprefCrimeList";
+    public static final String ListLat = "nameLat";
+    public static final String ListLng = "nameLng";
     private static final String TAG = CrimeListFragment.class.getSimpleName();
     private static final String url = "http://thetechnophile.000webhostapp.com/load_crime.json";
+    View v;
+    SwipeRefreshLayout mSwipeRefreshLayout;
+    String latHai, lngHai;
+    SharedPreferences crimeListsp;
     private AlertDialog progressDialog;
     private List<Crime> crimeList = new ArrayList<>();
     private ListView listView;
     private CustomListAdapter adapter;
-    SwipeRefreshLayout mSwipeRefreshLayout;
-    String latHai, lngHai;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         v = inflater.inflate(R.layout.fragment_crime_list, container, false);
+
+        crimeListsp = getContext().getSharedPreferences(crimelistsharedpref, Context.MODE_PRIVATE);
 
         mSwipeRefreshLayout = v.findViewById(R.id.swipeToRefresh);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorApplication);
@@ -78,16 +88,23 @@ public class CrimeListFragment extends Fragment implements ConnectivityReceiver.
         adapter = new CustomListAdapter(getActivity(), crimeList);
         listView.setAdapter(adapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Crime ss = (Crime) listView.getItemAtPosition(position);
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                try {
+                    Crime ss = (Crime) listView.getItemAtPosition(position);
 
-                latHai = ss.getLat();
-                lngHai = ss.getLng();
+                    latHai = ss.getLat();
+                    lngHai = ss.getLng();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return false;
+
             }
         });
-
+        registerForContextMenu(listView);
         progressDialog = new SpotsDialog(getActivity(), R.style.Custom3);
         progressDialog.show();
 
@@ -132,6 +149,32 @@ public class CrimeListFragment extends Fragment implements ConnectivityReceiver.
         AppController.getInstance().addToRequestQueue(movieReq);
         return v;
     }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        menu.add(0, v.getId(), 1, "Find on Map");
+        super.onCreateContextMenu(menu, v, menuInfo);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        if (item.getTitle() == "Find on Map") {
+            SharedPreferences.Editor ed = crimeListsp.edit();
+            ed.putString(ListLat, latHai);
+            ed.putString(ListLng, lngHai);
+            ed.apply();
+
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction ft = fragmentManager.beginTransaction();
+            ft.replace(R.id.rootLayout, new CrimeMapFragment());
+            fragmentManager.popBackStack();
+            ft.commit();
+
+        }
+        return super.onContextItemSelected(item);
+    }
+
+
 
     private void shuffle() {
         adapter = new CustomListAdapter(getActivity(), crimeList);

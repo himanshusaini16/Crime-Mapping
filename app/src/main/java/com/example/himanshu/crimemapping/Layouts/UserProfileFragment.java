@@ -79,44 +79,53 @@ import static android.app.Activity.RESULT_OK;
 
 public class UserProfileFragment extends Fragment implements ConnectivityReceiver.ConnectivityReceiverListener {
 
-    View v;
-    FirebaseAuth mAuth;
-    private static int RESULT_LOAD_IMAGE = 1;
     public static final String MyPREFERENCES = "MyPre";
     public static final String key = "nameKey";
+    public static final String mypreferencethisislogin = "myprefLogin";
+    public static final String mypreferencethisissignup = "myprefSignup";
+    public static final String UserDataEmail = "emailKey";
+    public static final String UserDataName = "nameKey";
+    private static final String TAG = UserProfileFragment.class.getSimpleName();
+    private static final String url = "http://thetechnophile.000webhostapp.com/load_crime_UserRelated.json";
+    private static int RESULT_LOAD_IMAGE = 1;
+    View v;
+    FirebaseAuth mAuth;
     SharedPreferences sharedpreferences;
     CircularImageView changedp;
     Bitmap btmap;
     String userEmail;
     String deleteRow;
     ListView listView;
-
-    private AdView mAdView;
-
     java.util.Date date1, date2;
-
-    private static final String TAG = UserProfileFragment.class.getSimpleName();
-    private static final String url = "http://thetechnophile.000webhostapp.com/load_crime_UserRelated.json";
-    private List<Crime_UserRelated> UserCrimeList = new ArrayList<>();
-    private Custom_UserListAdapter adapter;
-
-    private ProgressBar progressBar;
     TextView upName;
-    private Context mContext;
-    private PopupWindow popupWindow;
     RelativeLayout mRelativeLayout;
     String currentDateForCheck, dateFromServer;
-
     SharedPreferences userDataSharedPreferenceSignup, userDataSharedPreferenceLogin;
-
-
-    public static final String mypreferencethisislogin = "myprefLogin";
-    public static final String mypreferencethisissignup = "myprefSignup";
-    public static final String UserDataEmail = "emailKey";
-    public static final String UserDataName = "nameKey";
-
     Button changeDPicture, removeDPicture;
     AlertDialog.Builder alertDialogBuilder;
+    private AdView mAdView;
+    private List<Crime_UserRelated> UserCrimeList = new ArrayList<>();
+    private Custom_UserListAdapter adapter;
+    private ProgressBar progressBar;
+    private Context mContext;
+    private PopupWindow popupWindow;
+
+    public static String encodeTobase64(Bitmap image) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] b = baos.toByteArray();
+        String imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
+
+        Log.d("Image Log:", imageEncoded);
+        return imageEncoded;
+
+    }
+
+    public static Bitmap decodeBase64(String input) {
+        byte[] decodedByte = Base64.decode(input, 0);
+        return BitmapFactory
+                .decodeByteArray(decodedByte, 0, decodedByte.length);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -334,7 +343,6 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
         return super.onContextItemSelected(item);
     }
 
-
     private void functionToDelete() {
 
         progressBar.setVisibility(View.VISIBLE);
@@ -384,6 +392,7 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
                 saveLoginDetails(null, null);
                 sharedpreferences = getContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
                 sharedpreferences.edit().remove(key).apply();
+                listView.setAdapter(null);
                 userDataSharedPreferenceSignup.edit().remove(UserDataName).apply();
                 userDataSharedPreferenceSignup.edit().remove(UserDataEmail).apply();
                 userDataSharedPreferenceLogin.edit().remove(UserDataEmail).apply();
@@ -442,7 +451,6 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
         showSnack(isConnected);
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -462,23 +470,6 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
             editor.apply();
         }
 
-    }
-
-    public static String encodeTobase64(Bitmap image) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        byte[] b = baos.toByteArray();
-        String imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
-
-        Log.d("Image Log:", imageEncoded);
-        return imageEncoded;
-
-    }
-
-    public static Bitmap decodeBase64(String input) {
-        byte[] decodedByte = Base64.decode(input, 0);
-        return BitmapFactory
-                .decodeByteArray(decodedByte, 0, decodedByte.length);
     }
 
 

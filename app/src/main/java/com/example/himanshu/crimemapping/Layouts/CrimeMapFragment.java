@@ -94,27 +94,29 @@ import static com.example.himanshu.crimemapping.Layouts.SignupActivity.PREFS_NAM
 public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, LocationListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMyLocationButtonClickListener, ConnectivityReceiver.ConnectivityReceiverListener {
 
+    public static final String crimelistsharedpref = "myprefCrimeList";
+    public static final String ListLat = "nameLat";
+    public static final String ListLng = "nameLng";
+    public static final String AddCrimesharedpref = "myprefAddCrime";
+    public static final String ListLatAdded = "nameLatAdded";
+    public static final String ListLngAdded = "nameLngAdded";
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private static final int MY_PERMISSION_REQUEST_FINE_LOCATION = 101;
-
+    private static final String url = "http://thetechnophile.000webhostapp.com/load_crime.json";
     View v;
     MapView mMapView;
     GoogleMap mMap;
     boolean GpsStatus = true;
-    private GoogleApiClient googleApiClient;
     LocationRequest mLocationRequest;
     Marker mCurrLocationMarker;
     LatLng latLngLoc, mClickPos;
-    String place_searched;
+    String place_searched, LatfromList, LngfromList, aal, bbl;
     LatLng center;
     AlertDialog.Builder alertDialogBuilder;
-
-    private AdView mAdView;
-
-
-    private static final String url = "http://thetechnophile.000webhostapp.com/load_crime.json";
-
+    SharedPreferences crimeListsp;
+    SharedPreferences AddCrimesp;
+    private GoogleApiClient googleApiClient;
     private List<Crime> crimeList = new ArrayList<Crime>();
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -122,11 +124,8 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
 
         v = inflater.inflate(R.layout.fragment_crime_map, container, false);
 
-        MobileAds.initialize(getActivity(), "ca-app-pub-4510895115386086/5333881416");
-
-        mAdView = v.findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+        crimeListsp = getContext().getSharedPreferences(crimelistsharedpref, Context.MODE_PRIVATE);
+        AddCrimesp = getContext().getSharedPreferences(AddCrimesharedpref, Context.MODE_PRIVATE);
 
 
 
@@ -233,7 +232,6 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
         }
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle item selection
@@ -299,7 +297,6 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
                 .show();
     }
 
-
     @Override
     public void onMapReady(final GoogleMap googleMap) {
 
@@ -355,6 +352,32 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
         });
 
         checkFirstRun();
+
+        if (crimeListsp.contains(ListLat)) {
+            LatfromList = crimeListsp.getString(ListLat, "");
+            LngfromList = crimeListsp.getString(ListLng, "");
+
+
+            LatLng latLng = new LatLng(Double.parseDouble(LatfromList), Double.parseDouble(LngfromList));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13), 2000, null);
+
+            crimeListsp.edit().remove(ListLat).apply();
+            crimeListsp.edit().remove(ListLng).apply();
+
+        }
+
+        if (AddCrimesp.contains(ListLatAdded)) {
+            aal = AddCrimesp.getString(ListLatAdded, "");
+            bbl = AddCrimesp.getString(ListLngAdded, "");
+
+
+            CameraPosition position1a = CameraPosition.builder().target(new LatLng(Double.parseDouble(aal), Double.parseDouble(bbl))).zoom(10).bearing(0).build();
+            googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(position1a));
+
+            AddCrimesp.edit().remove(ListLatAdded).apply();
+            AddCrimesp.edit().remove(ListLngAdded).apply();
+
+        }
 
     }
 
@@ -466,37 +489,6 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
 
     }
 
-
-    private class updateData extends AsyncTask<String, String, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-            HttpURLConnection conn = null;
-
-            try {
-                URL url;
-                url = new URL(params[0]);
-                conn = (HttpURLConnection) url.openConnection();
-                if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    conn.getInputStream();
-                } else {
-                    conn.getErrorStream();
-                }
-                return "Done";
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (conn != null) {
-                    conn.disconnect();
-                }
-            }
-            return null;
-        }
-    }
-
-
-    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-
     private void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -554,7 +546,6 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
 
     }
 
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -602,7 +593,6 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
 
     }
 
-
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
@@ -640,7 +630,6 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
                 }
         }
     }
-
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -701,12 +690,10 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
         }
     }
 
-
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
         showSnack(isConnected);
     }
-
 
     private void showFirstTimeAlert(int id) {
         alertDialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), android.R.style.Theme_DeviceDefault_Light));
@@ -729,7 +716,6 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
 
     }
 
-
     public void checkFirstRun() {
         boolean isFirstRun = getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRun", true);
         if (isFirstRun) {
@@ -738,6 +724,33 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
                     .edit()
                     .putBoolean("isFirstRun", false)
                     .apply();
+        }
+    }
+
+    private class updateData extends AsyncTask<String, String, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            HttpURLConnection conn = null;
+
+            try {
+                URL url;
+                url = new URL(params[0]);
+                conn = (HttpURLConnection) url.openConnection();
+                if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    conn.getInputStream();
+                } else {
+                    conn.getErrorStream();
+                }
+                return "Done";
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (conn != null) {
+                    conn.disconnect();
+                }
+            }
+            return null;
         }
     }
 

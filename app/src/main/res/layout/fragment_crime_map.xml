@@ -1,8 +1,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/crimeMapFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/crimeMapFragment"
     tools:context="com.example.himanshu.crimemapping.Layouts.CrimeMapFragment">
 
 
@@ -13,12 +13,5 @@
         android:layout_height="match_parent" />
 
 
-    <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/adView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        ads:adSize="BANNER"
-        ads:adUnitId="ca-app-pub-4510895115386086/5333881416" />
 
 </FrameLayout>
