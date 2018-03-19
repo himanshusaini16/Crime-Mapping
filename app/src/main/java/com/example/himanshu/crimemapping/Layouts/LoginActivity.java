@@ -94,8 +94,6 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
 
                 if (response.equals("Login")) {
                     progressDialog.hide();
-                    loginUserName.setText(null);
-                    loginPassword.setText(null);
                     s2 = new Intent(LoginActivity.this, BottomNavigationHomeActivity.class);
                     s2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(s2);

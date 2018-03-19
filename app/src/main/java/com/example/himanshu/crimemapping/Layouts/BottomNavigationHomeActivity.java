@@ -1,24 +1,17 @@
 package com.example.himanshu.crimemapping.Layouts;
 
-import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import com.example.himanshu.crimemapping.R;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 
 public class BottomNavigationHomeActivity extends AppCompatActivity {
@@ -89,7 +82,7 @@ public class BottomNavigationHomeActivity extends AppCompatActivity {
             FragmentTransaction ft = fragmentManager.beginTransaction();
             if (ft != null) {
                 ft.replace(R.id.rootLayout, fragment);
-                ft.addToBackStack("");
+                fragmentManager.popBackStack();
                 ft.commit();
             }
         }

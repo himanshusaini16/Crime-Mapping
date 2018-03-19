@@ -90,8 +90,8 @@
         merely informative, updated by the users themselves.\nThe author is not responsible for the inaccuracy of the information entered.
         \n\nThis application is in continuous development.
     </string>
-    <string name="info_title_aboutus">About Us…</string>
-    <string name="info_message_aboutus">Developers:\n\nHimanshu Saini\nArya Gaurav\nLakshendra Singh\nAmay Kalal\nKumar Santnu</string>
+    <string name="info_title_aboutus">Developers:</string>
+    <string name="info_message_aboutus">Himanshu Saini \nArya Gaurav \nLakshendra Singh\nAmay Kalal\nKumar Santnu</string>
     <string name="llogout">Logout</string>
     <string name="edit_profile">Edit Profile</string>
 
@@ -111,6 +111,8 @@
     <string name="update_profile">Update</string>
     <string name="reported_on">Reported On:</string>
     <string name="feedback_app">Feedback</string>
+    <string name="welcome_crime_mapping">Welcome to CRIME MAPPING!</string>
+    <string name="pressss">Press and hold a Location on map to Add a crime.</string>
 
 
 </resources>

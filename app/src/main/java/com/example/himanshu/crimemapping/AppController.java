@@ -19,6 +19,8 @@ public class AppController extends MyApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+
+
         mInstance = this;
     }
 

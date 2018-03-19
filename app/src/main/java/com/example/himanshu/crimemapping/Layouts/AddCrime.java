@@ -39,10 +39,16 @@ import com.basgeekball.awesomevalidation.utility.RegexTemplate;
 import com.example.himanshu.crimemapping.CustomAdapter;
 import com.example.himanshu.crimemapping.LocationAddress;
 import com.example.himanshu.crimemapping.R;
+import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.RemoteMessage;
+import com.onesignal.OSPermissionSubscriptionState;
+import com.onesignal.OneSignal;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -79,7 +85,7 @@ public class AddCrime extends AppCompatActivity {
     private Random random = new Random();
 
     private java.util.Date currentLocalTime;
-    private String localTime;
+    private String localTime, tag_uemail;
 
     int crime_images[] = {R.drawable.icon_big_robbery, R.drawable.icon_big_moto, R.drawable.icon_big_car, R.drawable.icon_big_hijacking,
             R.drawable.icon_big_robandkill, R.drawable.icon_big_drugs
@@ -119,16 +125,22 @@ public class AddCrime extends AppCompatActivity {
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId("ca-app-pub-4510895115386086/3390244359");
 
+        AdRequest adRequest = new AdRequest.Builder().build();
+
+        mInterstitialAd.loadAd(adRequest);
+
         userDataSharedPreferenceLogin = getSharedPreferences(mypreferencethisislogin, Context.MODE_PRIVATE);
         userDataSharedPreferenceSignup = getSharedPreferences(mypreferencethisissignup, Context.MODE_PRIVATE);
 
 
         if (userDataSharedPreferenceLogin.contains(UserDataEmail)) {
             crime_email_final = userDataSharedPreferenceLogin.getString(UserDataEmail, "");
+            tag_uemail = userDataSharedPreferenceLogin.getString(UserDataEmail, "");
         }
 
         if (userDataSharedPreferenceSignup.contains(UserDataEmail)) {
             crime_email_final = userDataSharedPreferenceSignup.getString(UserDataEmail, "");
+            tag_uemail = userDataSharedPreferenceSignup.getString(UserDataEmail, "");
         }
 
 
@@ -210,7 +222,7 @@ public class AddCrime extends AppCompatActivity {
 
             alertDialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(AddCrime.this, android.R.style.Theme_DeviceDefault_Light));
             alertDialogBuilder.setTitle("Are you Sure?");
-            alertDialogBuilder.setMessage("Once Crime is posted on map, it cannot be deleted within a period of 1 week.");
+            alertDialogBuilder.setMessage("Once crime is posted on the map, it cannot be deleted within period of 7 days.");
             alertDialogBuilder.setCancelable(false);
             alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
@@ -277,6 +289,19 @@ public class AddCrime extends AppCompatActivity {
                     s1 = new Intent(AddCrime.this, BottomNavigationHomeActivity.class);
                     s1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(s1);
+
+                    if (mInterstitialAd.isLoaded()) {
+                        mInterstitialAd.show();
+                    }
+//                    JSONObject tags = new JSONObject();
+//                    try {
+//                        tags.put("user_email", tag_uemail);
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                    OneSignal.sendTags(tags);
+//
+//                    getTagsOneSignal();
                     finish();
 
                 }
@@ -311,11 +336,19 @@ public class AddCrime extends AppCompatActivity {
         postRequest.setRetryPolicy(new DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         queue.add(postRequest);
 
-        if (mInterstitialAd.isLoaded()) {
-            mInterstitialAd.show();
-        }
+
     }
 
+//    private void getTagsOneSignal() {
+//        OSPermissionSubscriptionState status = OneSignal.getPermissionSubscriptionState();
+//        boolean isEnabled = status.getPermissionStatus().getEnabled();
+//        boolean isSubscribed = status.getSubscriptionStatus().getSubscribed();
+//        boolean subscriptionSetting = status.getSubscriptionStatus().getUserSubscriptionSetting();
+//
+//        String userID = status.getSubscriptionStatus().getUserId();
+//        String pushToken = status.getSubscriptionStatus().getPushToken();
+//    }
+//
 
     public void authenticate() {
         if (awesomeValidation.validate()) {

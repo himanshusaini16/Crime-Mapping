@@ -100,7 +100,7 @@ public class EditUserProfile extends AppCompatActivity implements ConnectivityRe
 
     private void updateUserProfile() {
 
-//        addValidationToViews();
+
         authenticate();
 
         RequestQueue queue = Volley.newRequestQueue(EditUserProfile.this);
@@ -149,12 +149,6 @@ public class EditUserProfile extends AppCompatActivity implements ConnectivityRe
         inflater.inflate(R.menu.menu_editprofile, menu);
         return true;
     }
-
-//    private void addValidationToViews() {
-//        awesomeValidation.addValidation(this, R.id.EditTextName, RegexTemplate.NOT_EMPTY, R.string.invalid_name);
-//        String regexPassword = ".{6,}";
-//        awesomeValidation.addValidation(this, R.id.EditTextPassword, regexPassword, R.string.invalid_password);
-//    }
 
 
     public void authenticate() {

@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -29,6 +30,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -83,7 +85,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import static android.content.ContentValues.TAG;
+import static android.content.Context.MODE_PRIVATE;
+import static com.example.himanshu.crimemapping.Layouts.SignupActivity.PREFS_NAME;
 
 
 public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, LocationListener, GoogleApiClient.ConnectionCallbacks,
@@ -101,6 +106,7 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
     LatLng latLngLoc, mClickPos;
     String place_searched;
     LatLng center;
+    AlertDialog.Builder alertDialogBuilder;
 
     private AdView mAdView;
 
@@ -121,6 +127,7 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
         mAdView = v.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+
 
 
         String link = "http://thetechnophile.000webhostapp.com/load_crime.php";
@@ -149,6 +156,7 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
             mMapView.onCreate(savedInstanceState);
             mMapView.onResume();
             mMapView.getMapAsync(this);
+
         }
 
 
@@ -345,6 +353,8 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
                 startActivityForResult(ed, 100);
             }
         });
+
+        checkFirstRun();
 
     }
 
@@ -695,6 +705,40 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
         showSnack(isConnected);
+    }
+
+
+    private void showFirstTimeAlert(int id) {
+        alertDialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), android.R.style.Theme_DeviceDefault_Light));
+        alertDialogBuilder.setTitle(R.string.welcome_crime_mapping);
+        alertDialogBuilder.setMessage(R.string.pressss);
+        alertDialogBuilder.setCancelable(false);
+        alertDialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        alertDialogBuilder.show();
+
+        SharedPreferences settings = getContext().getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean("accepted", true);
+        // Commit the edits!
+        editor.apply();
+
+    }
+
+
+    public void checkFirstRun() {
+        boolean isFirstRun = getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRun", true);
+        if (isFirstRun) {
+            showFirstTimeAlert(0);
+            getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+                    .edit()
+                    .putBoolean("isFirstRun", false)
+                    .apply();
+        }
     }
 
 
