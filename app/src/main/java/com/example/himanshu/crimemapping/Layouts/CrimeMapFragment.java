@@ -37,7 +37,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,16 +52,12 @@ import com.example.himanshu.crimemapping.Crime;
 import com.example.himanshu.crimemapping.InfoWindowData;
 import com.example.himanshu.crimemapping.MyApplication;
 import com.example.himanshu.crimemapping.R;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -85,14 +81,13 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import static android.content.ContentValues.TAG;
 import static android.content.Context.MODE_PRIVATE;
 import static com.example.himanshu.crimemapping.Layouts.SignupActivity.PREFS_NAME;
 
 
 public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, LocationListener, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMyLocationButtonClickListener, ConnectivityReceiver.ConnectivityReceiverListener {
+        GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMyLocationButtonClickListener, ConnectivityReceiver.ConnectivityReceiverListener, GoogleMap.OnCameraChangeListener, GoogleMap.OnMapLoadedCallback {
 
     public static final String crimelistsharedpref = "myprefCrimeList";
     public static final String ListLat = "nameLat";
@@ -115,6 +110,7 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
     AlertDialog.Builder alertDialogBuilder;
     SharedPreferences crimeListsp;
     SharedPreferences AddCrimesp;
+    ProgressBar pb;
     private GoogleApiClient googleApiClient;
     private List<Crime> crimeList = new ArrayList<Crime>();
 
@@ -124,10 +120,12 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
 
         v = inflater.inflate(R.layout.fragment_crime_map, container, false);
 
+        pb = v.findViewById(R.id.progressBarMapLoading);
+
+        pb.setVisibility(View.VISIBLE);
+
         crimeListsp = getContext().getSharedPreferences(crimelistsharedpref, Context.MODE_PRIVATE);
         AddCrimesp = getContext().getSharedPreferences(AddCrimesharedpref, Context.MODE_PRIVATE);
-
-
 
         String link = "http://thetechnophile.000webhostapp.com/load_crime.php";
         new updateData().execute(link);
@@ -143,6 +141,7 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
         setRetainInstance(true);
     }
 
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -152,14 +151,17 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
         }
         mMapView = v.findViewById(R.id.mapView);
         if (mMapView != null) {
+
             mMapView.onCreate(savedInstanceState);
             mMapView.onResume();
             mMapView.getMapAsync(this);
+
 
         }
 
 
     }
+
 
     @Override
     public void onCreateOptionsMenu(final Menu menu, MenuInflater inflater) {
@@ -236,9 +238,14 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle item selection
         switch (item.getItemId()) {
+
             case R.id.action_refresh:
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.detach(this).attach(this).commit();
+                break;
+
+            case R.id.report_incident:
+                Toast.makeText(getActivity(), R.string.pressss, Toast.LENGTH_LONG).show();
                 break;
 
             case R.id.about_app:
@@ -267,7 +274,6 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
                 email.setType("message/rfc822");
                 startActivity(Intent.createChooser(email, "Send Email:"));
                 break;
-
 
 
             default:
@@ -300,6 +306,7 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
     @Override
     public void onMapReady(final GoogleMap googleMap) {
 
+
         MapsInitializer.initialize(getActivity());
         mMap = googleMap;
 
@@ -317,7 +324,8 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
         }
 
         googleMap.setOnMyLocationButtonClickListener(this);
-
+        googleMap.setOnCameraChangeListener(this);
+        googleMap.setOnMapLoadedCallback(this);
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getActivity(), R.raw.style));
         googleMap.getUiSettings().setZoomControlsEnabled(true);
@@ -334,7 +342,6 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
 
         CameraPosition position1 = CameraPosition.builder().target(new LatLng(26.9124, 75.7873)).zoom(10).bearing(0).build();
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(position1));
-
 
 
         loadMarkersOnMap();
@@ -378,6 +385,7 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
             AddCrimesp.edit().remove(ListLngAdded).apply();
 
         }
+
 
     }
 
@@ -651,6 +659,7 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
 
     }
 
+
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
@@ -725,6 +734,20 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
                     .putBoolean("isFirstRun", false)
                     .apply();
         }
+    }
+
+    @Override
+    public void onCameraChange(CameraPosition cameraPosition) {
+        mMap.setOnMapLoadedCallback(this);
+
+        pb.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onMapLoaded() {
+
+        pb.setVisibility(View.INVISIBLE);
+
     }
 
     private class updateData extends AsyncTask<String, String, String> {

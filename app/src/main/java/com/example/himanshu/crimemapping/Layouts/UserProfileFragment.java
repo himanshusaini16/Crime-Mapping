@@ -145,8 +145,11 @@ public class UserProfileFragment extends Fragment implements ConnectivityReceive
 
 
         if (userDataSharedPreferenceLogin.contains(UserDataEmail)) {
-//            upName.setText(userDataSharedPreferenceLogin.getString(UserDataEmail, ""));
+
             userEmail = userDataSharedPreferenceLogin.getString(UserDataEmail, "");
+        }
+        if (userDataSharedPreferenceLogin.contains(UserDataName)) {
+            upName.setText(userDataSharedPreferenceLogin.getString(UserDataName, ""));
         }
 
         if (userDataSharedPreferenceSignup.contains(UserDataName)) {

@@ -21,6 +21,12 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/report_incident"
+        android:orderInCategory="25"
+        android:title="@string/report_incident"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/about_app"
         android:orderInCategory="30"
         android:title="@string/about_app"

@@ -40,18 +40,17 @@ import dmax.dialog.SpotsDialog;
 
 public class EditUserProfile extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
 
-    EditText editName, editEmail, editPass;
-    Button updateinfo;
-    SharedPreferences userDataSharedPreferenceSignup, userDataSharedPreferenceLogin;
-    private AlertDialog progressDialog;
-    private AwesomeValidation awesomeValidation;
-    String primaryName, finalName, finalPassword, primaryEmail;
-
     public static final String mypreferencethisislogin = "myprefLogin";
     public static final String mypreferencethisissignup = "myprefSignup";
     public static final String UserDataEmail = "emailKey";
     public static final String UserDataName = "nameKey";
     public static final String UserDataPassword = "passwordKey";
+    EditText editName, editEmail, editPass;
+    Button updateinfo;
+    SharedPreferences userDataSharedPreferenceSignup, userDataSharedPreferenceLogin;
+    String primaryName, finalName, finalPassword, primaryEmail;
+    private AlertDialog progressDialog;
+    private AwesomeValidation awesomeValidation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +71,12 @@ public class EditUserProfile extends AppCompatActivity implements ConnectivityRe
         if (userDataSharedPreferenceSignup.contains(UserDataName)) {
             editName.setText(userDataSharedPreferenceSignup.getString(UserDataName, ""));
             primaryName = userDataSharedPreferenceSignup.getString(UserDataName, "");
+
+        }
+
+        if (userDataSharedPreferenceLogin.contains(UserDataName)) {
+            editName.setText(userDataSharedPreferenceLogin.getString(UserDataName, ""));
+            primaryName = userDataSharedPreferenceLogin.getString(UserDataName, "");
 
         }
 

@@ -10,24 +10,34 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
+import com.example.himanshu.crimemapping.AppController;
 import com.example.himanshu.crimemapping.ConnectivityReceiver;
+import com.example.himanshu.crimemapping.Crime_UserRelated;
 import com.example.himanshu.crimemapping.MyApplication;
 import com.example.himanshu.crimemapping.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,18 +48,20 @@ import dmax.dialog.SpotsDialog;
 public class LoginActivity extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
 
 
-    Button loginButton;
-    EditText loginUserName, loginPassword;
-    String lnemail, lnpassword;
-    private AlertDialog progressDialog;
-    Intent s2;
-    private AwesomeValidation awesomeValidation;
-    SharedPreferences userDataSharedPreferenceLogin;
-
     public static final String mypreferencethisislogin = "myprefLogin";
     public static final String UserDataEmail = "emailKey";
     public static final String UserDataPassword = "passwordKey";
-
+    public static final String UserDataName = "nameKey";
+    private static final String TAG = LoginActivity.class.getSimpleName();
+    private static final String url = "http://thetechnophile.000webhostapp.com/login_username.json";
+    Button loginButton;
+    EditText loginUserName, loginPassword;
+    String lnemail, lnpassword;
+    Intent s2;
+    SharedPreferences userDataSharedPreferenceLogin;
+    String nnnname;
+    private AlertDialog progressDialog;
+    private AwesomeValidation awesomeValidation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +105,37 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
             public void onResponse(String response) {
 
                 if (response.equals("Login")) {
+                    JsonArrayRequest listReq = new JsonArrayRequest(url,
+                            new Response.Listener<JSONArray>() {
+                                @Override
+                                public void onResponse(JSONArray response) {
+                                    Log.d(TAG, response.toString());
+                                    for (int i = 0; i <= response.length(); i++) {
+                                        try {
+                                            JSONObject obj = response.getJSONObject(i);
+
+                                            nnnname = obj.getString("username");
+
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+                            }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            VolleyLog.d(TAG, "Error: " + error.getMessage());
+                        }
+                    });
+                    AppController.getInstance().addToRequestQueue(listReq);
+
+
+                    SharedPreferences.Editor ed = userDataSharedPreferenceLogin.edit();
+                    ed.putString(UserDataName, nnnname);
+                    ed.putString(UserDataEmail, lnemail);
+                    ed.putString(UserDataPassword, lnpassword);
+                    ed.apply();
+
                     progressDialog.hide();
                     s2 = new Intent(LoginActivity.this, BottomNavigationHomeActivity.class);
                     s2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -137,10 +180,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
             lnemail = loginUserName.getText().toString();
             lnpassword = loginPassword.getText().toString();
 
-            SharedPreferences.Editor ed = userDataSharedPreferenceLogin.edit();
-            ed.putString(UserDataEmail, lnemail);
-            ed.putString(UserDataPassword, lnpassword);
-            ed.apply();
+
         }
         progressDialog = new SpotsDialog(LoginActivity.this, R.style.Custom0);
         progressDialog.show();

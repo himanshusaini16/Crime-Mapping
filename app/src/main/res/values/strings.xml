@@ -113,6 +113,7 @@
     <string name="feedback_app">Feedback</string>
     <string name="welcome_crime_mapping">Welcome to CRIME MAPPING!</string>
     <string name="pressss">Press and hold a Location on map to Add a crime.</string>
+    <string name="report_incident">Add Crime/Incident</string>
 
 
 </resources>

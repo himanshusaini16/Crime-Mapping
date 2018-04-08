@@ -2,9 +2,6 @@ package com.example.himanshu.crimemapping;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
-import android.widget.Toast;
-
-import com.onesignal.OneSignal;
 
 
 @SuppressLint("Registered")
@@ -12,16 +9,14 @@ public class MyApplication extends Application {
 
     private static MyApplication mInstance;
 
+    public static synchronized MyApplication getInstance() {
+        return mInstance;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
-
-
         mInstance = this;
-    }
-
-    public static synchronized MyApplication getInstance() {
-        return mInstance;
     }
 
     public void setConnectivityListener(ConnectivityReceiver.ConnectivityReceiverListener listener) {
