@@ -17,9 +17,9 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:indeterminateDrawable="@drawable/progressbar_custom" />
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:indeterminateDrawable="@drawable/progressbar_custom_map" />
 
 
 </RelativeLayout>
