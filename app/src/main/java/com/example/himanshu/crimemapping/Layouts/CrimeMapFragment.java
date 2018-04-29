@@ -46,6 +46,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.ceylonlabs.imageviewpopup.ImagePopup;
 import com.example.himanshu.crimemapping.AppController;
 import com.example.himanshu.crimemapping.ConnectivityReceiver;
 import com.example.himanshu.crimemapping.Crime;
@@ -69,6 +70,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.SphericalUtil;
 import com.yarolegovich.lovelydialog.LovelyInfoDialog;
 
 import org.json.JSONArray;
@@ -104,13 +106,16 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
     boolean GpsStatus = true;
     LocationRequest mLocationRequest;
     Marker mCurrLocationMarker;
-    LatLng latLngLoc, mClickPos;
+    LatLng latLngLoc, mClickPos, kachraloc;
     String place_searched, LatfromList, LngfromList, aal, bbl;
     LatLng center;
     AlertDialog.Builder alertDialogBuilder;
     SharedPreferences crimeListsp;
     SharedPreferences AddCrimesp;
     ProgressBar pb;
+    ImagePopup imagePopup;
+    String ab;
+    LatLng aacha;
     private GoogleApiClient googleApiClient;
     private List<Crime> crimeList = new ArrayList<Crime>();
 
@@ -123,6 +128,10 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
         pb = v.findViewById(R.id.progressBarMapLoading);
 
         pb.setVisibility(View.VISIBLE);
+
+        imagePopup = new ImagePopup(getActivity());
+        imagePopup.setWindowHeight(1200);
+        imagePopup.setWindowWidth(1050);
 
         crimeListsp = getContext().getSharedPreferences(crimelistsharedpref, Context.MODE_PRIVATE);
         AddCrimesp = getContext().getSharedPreferences(AddCrimesharedpref, Context.MODE_PRIVATE);
@@ -155,11 +164,7 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
             mMapView.onCreate(savedInstanceState);
             mMapView.onResume();
             mMapView.getMapAsync(this);
-
-
         }
-
-
     }
 
 
@@ -386,8 +391,71 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
 
         }
 
+        googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(final Marker marker) {
+
+                aacha = marker.getPosition();
+//                mmmm();
+                imagePopup.initiatePopupWithPicasso("http://thetechnophile.000webhostapp.com/images_uploaded/noimage.jpg");
+
+
+                imagePopup.viewPopup();
+            }
+        });
 
     }
+
+    public void mmmm() {
+        JsonArrayRequest movieReq = new JsonArrayRequest(Request.Method.POST, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                Log.d(TAG, response.toString());
+
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+
+                        JSONObject obj = response.getJSONObject(i);
+
+
+                        LatLng ppos = new LatLng(Double.parseDouble(obj.getString("crime_latitude")), Double.parseDouble(obj.getString("crime_longitude")));
+
+                        Toast.makeText(getActivity(), ppos.toString(), Toast.LENGTH_SHORT).show();
+
+
+                        if (aacha == ppos) {
+                            Toast.makeText(getActivity(), "True", Toast.LENGTH_LONG).show();
+                            imagePopup.initiatePopupWithPicasso(obj.getString("img_by_user"));
+                            break;
+
+                        }
+//                        float YOUR_TOLERANCE = 1; // 1 meter
+//                        if (SphericalUtil.computeDistanceBetween(aacha, ppos) < YOUR_TOLERANCE) {
+//                            // Both locations are considered the same
+//
+//
+//                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+
+
+            }
+        });
+
+        AppController.getInstance().addToRequestQueue(movieReq);
+    }
+
+
 
     public void loadMarkersOnMap() {
 
@@ -402,6 +470,8 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
 
                         JSONObject obj = response.getJSONObject(i);
 
+//
+//                        imagePopup.initiatePopupWithPicasso(obj.getString("img_by_user"));
 
                         String myurl = obj.getString("crime_type");
 
@@ -474,6 +544,7 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
                         Marker m = mMap.addMarker(markerOptions);
                         m.setTag(idata);
                         m.hideInfoWindow();
+
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -776,7 +847,5 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
             return null;
         }
     }
-
-
 }
 

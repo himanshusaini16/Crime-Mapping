@@ -9,19 +9,37 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.os.StrictMode;
+import android.provider.MediaStore;
+import android.support.media.ExifInterface;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -43,8 +61,13 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -60,13 +83,18 @@ public class AddCrime extends AppCompatActivity {
     public static final String AddCrimesharedpref = "myprefAddCrime";
     public static final String ListLatAdded = "nameLatAdded";
     public static final String ListLngAdded = "nameLngAdded";
+    protected static final int CAMERA_REQUEST = 0;
+    protected static final int GALLERY_PICTURE = 1;
     private static final String TAG = "";
+    private static final int RESULT_SELECT_IMAGE = 1;
+    private static final int REQUEST_CODE = 123;
+    public String SERVER = "http://thetechnophile.000webhostapp.com/saveImage.php";
     EditText Date, Time;
     EditText cr_des;
     String format, cmmm = ".png";
     Intent s1;
     AlertDialog.Builder alertDialogBuilder;
-    String crime_type_final, crime_date_final, crime_time_final, crime_description_final, currentDate;
+    String crime_type_final, crime_date_final, crime_time_final, crime_description_final, currentDate, img_by_user;
     String marker_images_URL = "http://thetechnophile.000webhostapp.com/markers-images/";
     String marker_URL = "http://thetechnophile.000webhostapp.com/markers/";
     SharedPreferences userDataSharedPreferenceSignup, userDataSharedPreferenceLogin;
@@ -88,6 +116,16 @@ public class AddCrime extends AppCompatActivity {
             , R.string.crime_robandkill_desc, R.string.crime_drugs_desc, R.string.crime_garbage_desc, R.string.crime_bank_desc
             , R.string.crime_homicide_desc, R.string.crime_loudsound_desc, R.string.crime_sex_desc, R.string.crime_vandalism_desc
             , R.string.crime_police_desc, R.string.crime_animal_desc, R.string.crime_danplace_desc};
+    Bitmap bitmap = null;
+    String filename, ba1, timestamp, im_name;
+    PopupWindow mPopupWindow;
+    RelativeLayout rl1;
+    LayoutInflater layoutInflater;
+    View customView;
+    Button retry, done;
+    Uri fpath;
+    ImageView selectedImageV;
+    String selectedImagePath;
     private String crime_latitude_final, crime_longitude_final, crime_marker_final, crime_images_marker_final, crime_location_address_final, crime_email_final;
     private InterstitialAd mInterstitialAd;
     private AwesomeValidation awesomeValidation;
@@ -95,11 +133,24 @@ public class AddCrime extends AppCompatActivity {
     private Random random = new Random();
     private java.util.Date currentLocalTime;
     private String localTime, tag_uemail;
+    private Intent pictureActionIntent = null;
+    private ArrayList<String> mResults = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_crime);
+
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+
+        rl1 = findViewById(R.id.view_addcrimeactivity);
+        layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        customView = LayoutInflater.from(this).inflate(R.layout.image_popup_addcrime, null);
+
+        retry = customView.findViewById(R.id.retry_image);
+        done = customView.findViewById(R.id.done_image);
+        selectedImageV = customView.findViewById(R.id.im_popup_image);
 
         AddCrimesp = getSharedPreferences(AddCrimesharedpref, Context.MODE_PRIVATE);
 
@@ -124,6 +175,7 @@ public class AddCrime extends AppCompatActivity {
         AdRequest adRequest = new AdRequest.Builder().build();
 
         mInterstitialAd.loadAd(adRequest);
+
 
         userDataSharedPreferenceLogin = getSharedPreferences(mypreferencethisislogin, Context.MODE_PRIVATE);
         userDataSharedPreferenceSignup = getSharedPreferences(mypreferencethisissignup, Context.MODE_PRIVATE);
@@ -184,13 +236,10 @@ public class AddCrime extends AppCompatActivity {
                 @SuppressLint("SimpleDateFormat") DateFormat date = new SimpleDateFormat("KK:mm a");
                 date.setTimeZone(TimeZone.getTimeZone("GMT+5:30"));
                 localTime = date.format(currentLocalTime);
-
-
             }
 
             @Override
             public void onNothingSelected(AdapterView adapterView) {
-
             }
         });
     }
@@ -213,6 +262,10 @@ public class AddCrime extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+
+        if (id == R.id.selectImage) {
+            imageSelector();
+        }
 
         if (id == R.id.action_addcrime) {
 
@@ -247,34 +300,18 @@ public class AddCrime extends AppCompatActivity {
     }
 
 
-//    private void firebaseUpstream() {
-//        FirebaseMessaging fm = FirebaseMessaging.getInstance();
-//
-//        String SENDER_ID = "535718128844";
-//        RemoteMessage message = new RemoteMessage.Builder(SENDER_ID + "@gcm.googleapis.com")
-//                .setMessageId(Integer.toString(random.nextInt(9999)))
-//                .addData("Heading", "Crime Mapping")
-//                .addData("crime_sentence", "A new Crime is Added to The Map.")
-//                .addData("Crime_Type", crime_type_final)
-//                .build();
-//
-//        if (!message.getData().isEmpty()) {
-//            Log.e(TAG, "UpstreamData: " + message.getData());
-//        }
-//
-//        if (!message.getMessageId().isEmpty()) {
-//            Log.e(TAG, "UpstreamMessageId: " + message.getMessageId());
-//        }
-//
-//        fm.send(message);
-//    }
-
-
     public void addCrimeToDatabase() {
         addValidationToViews();
         authenticate();
 
-//        firebaseUpstream();
+
+        if (bitmap == null) {
+            img_by_user = "http://thetechnophile.000webhostapp.com/images_uploaded/noimage.jpg";
+        } else {
+            im_name = "IMG_" + timestamp;
+            new Upload(bitmap, im_name).execute();
+            img_by_user = "http://thetechnophile.000webhostapp.com/images_uploaded/IMG_" + timestamp + ".jpg";
+        }
 
         RequestQueue queue = Volley.newRequestQueue(AddCrime.this);
 
@@ -294,15 +331,7 @@ public class AddCrime extends AppCompatActivity {
                     if (mInterstitialAd.isLoaded()) {
                         mInterstitialAd.show();
                     }
-//                    JSONObject tags = new JSONObject();
-//                    try {
-//                        tags.put("user_email", tag_uemail);
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                    OneSignal.sendTags(tags);
-//
-//                    getTagsOneSignal();
+
                     finish();
 
                 }
@@ -330,6 +359,7 @@ public class AddCrime extends AppCompatActivity {
                 params.put("crime_location_address", crime_location_address_final);
                 params.put("crime_reporting_date", currentDate);
                 params.put("crime_reporting_time", localTime);
+                params.put("img_by_user", img_by_user);
 
                 return params;
             }
@@ -340,21 +370,12 @@ public class AddCrime extends AppCompatActivity {
 
     }
 
-//    private void getTagsOneSignal() {
-//        OSPermissionSubscriptionState status = OneSignal.getPermissionSubscriptionState();
-//        boolean isEnabled = status.getPermissionStatus().getEnabled();
-//        boolean isSubscribed = status.getSubscriptionStatus().getSubscribed();
-//        boolean subscriptionSetting = status.getSubscriptionStatus().getUserSubscriptionSetting();
-//
-//        String userID = status.getSubscriptionStatus().getUserId();
-//        String pushToken = status.getSubscriptionStatus().getPushToken();
-//    }
-//
 
     public void authenticate() {
         if (awesomeValidation.validate()) {
             crime_description_final = cr_des.getText().toString();
         }
+
         progressDialog = new SpotsDialog(AddCrime.this, R.style.Custom2);
         progressDialog.show();
     }
@@ -416,6 +437,181 @@ public class AddCrime extends AppCompatActivity {
         timePickerDialog.show();
     }
 
+    public void imageSelector() {
+        AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
+        myAlertDialog.setTitle("Upload Picture Option:");
+
+        myAlertDialog.setPositiveButton("Gallery",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        Intent pictureActionIntent = null;
+
+                        pictureActionIntent = new Intent(
+                                Intent.ACTION_PICK,
+                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(
+                                pictureActionIntent, GALLERY_PICTURE);
+
+
+                    }
+                });
+
+        myAlertDialog.setNegativeButton("Camera",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+
+                        Intent intent = new Intent(
+                                MediaStore.ACTION_IMAGE_CAPTURE);
+                        File f = new File(android.os.Environment
+                                .getExternalStorageDirectory(), "temp.jpg");
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT,
+                                Uri.fromFile(f));
+
+                        startActivityForResult(intent,
+                                CAMERA_REQUEST);
+                    }
+                });
+        myAlertDialog.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        bitmap = null;
+        selectedImagePath = null;
+
+        if (resultCode == RESULT_OK && requestCode == CAMERA_REQUEST) {
+            Long tsLong = System.currentTimeMillis() / 1000;
+            timestamp = tsLong.toString();
+
+            File f = new File(Environment.getExternalStorageDirectory()
+                    .toString());
+            for (File temp : f.listFiles()) {
+                if (temp.getName().equals("temp.jpg")) {
+                    f = temp;
+                    Toast.makeText(getBaseContext(), "Image Selected", Toast.LENGTH_SHORT).show();
+                    break;
+                }
+            }
+
+            if (!f.exists()) {
+                Toast.makeText(getBaseContext(), "Error while capturing image", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            try {
+
+                bitmap = BitmapFactory.decodeFile(f.getAbsolutePath());
+                bitmap = Bitmap.createScaledBitmap(bitmap, 300, 300, true);
+                selectedImageV.setImageBitmap(bitmap);
+                popupWindowMethod();
+                int rotate = 0;
+                try {
+                    ExifInterface exif = new ExifInterface(f.getAbsolutePath());
+                    int orientation = exif.getAttributeInt(
+                            ExifInterface.TAG_ORIENTATION,
+                            ExifInterface.ORIENTATION_NORMAL);
+
+                    switch (orientation) {
+                        case ExifInterface.ORIENTATION_ROTATE_270:
+                            rotate = 270;
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_180:
+                            rotate = 180;
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_90:
+                            rotate = 90;
+                            break;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Matrix matrix = new Matrix();
+                matrix.postRotate(rotate);
+                bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+                        bitmap.getHeight(), matrix, true);
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        } else if (resultCode == RESULT_OK && requestCode == GALLERY_PICTURE) {
+            if (data != null) {
+                Toast.makeText(getBaseContext(), "Image Selected", Toast.LENGTH_SHORT).show();
+
+                Long tsLong = System.currentTimeMillis() / 1000;
+                timestamp = tsLong.toString();
+
+                Uri selectedImage = data.getData();
+                String[] filePath = {MediaStore.Images.Media.DATA};
+                Cursor c = getContentResolver().query(selectedImage, filePath,
+                        null, null, null);
+                c.moveToFirst();
+                int columnIndex = c.getColumnIndex(filePath[0]);
+                selectedImagePath = c.getString(columnIndex);
+                bitmap = BitmapFactory.decodeFile(selectedImagePath);
+                bitmap = Bitmap.createScaledBitmap(bitmap, 300, 300, true);
+                selectedImageV.setImageBitmap(bitmap);
+                popupWindowMethod();
+
+                c.close();
+
+
+            } else {
+                Toast.makeText(getApplicationContext(), "Cancelled",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+
+    }
+
+    private String hashMapToUrl(HashMap<String, String> params) throws UnsupportedEncodingException {
+        StringBuilder result = new StringBuilder();
+        boolean first = true;
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            if (first)
+                first = false;
+            else
+                result.append("&");
+
+            result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
+            result.append("=");
+            result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
+        }
+
+        return result.toString();
+    }
+
+    public void popupWindowMethod() {
+        mPopupWindow = new PopupWindow(customView, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        mPopupWindow.setIgnoreCheekPress();
+        mPopupWindow.setFocusable(true);
+        mPopupWindow.setOutsideTouchable(false);
+        mPopupWindow.update();
+        mPopupWindow.setAnimationStyle(R.style.popup_window_animation_phone);
+
+        retry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPopupWindow.dismiss();
+                imageSelector();
+            }
+        });
+
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPopupWindow.dismiss();
+            }
+        });
+
+        mPopupWindow.showAtLocation(rl1, Gravity.CENTER, 0, -50);
+        if (mPopupWindow.isShowing()) {
+            rl1.setVisibility(View.VISIBLE);
+        }
+
+    }
 
     @SuppressLint("HandlerLeak")
     private class GeocoderHandler extends Handler {
@@ -433,5 +629,54 @@ public class AddCrime extends AppCompatActivity {
             crime_location_address_final = locationAddress;
         }
     }
+
+    //async task to upload image
+    private class Upload extends AsyncTask<Void, Void, String> {
+        private Bitmap image;
+        private String name;
+
+        public Upload(Bitmap image, String name) {
+            this.image = image;
+            this.name = name;
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            //compress the image to jpg format
+            image.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+            /*
+            * encode image to base64 so that it can be picked by saveImage.php file
+            * */
+            String encodeImage = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
+
+            //generate hashMap to store encodedImage and the name
+            HashMap<String, String> detail = new HashMap<>();
+            detail.put("name", name);
+            detail.put("image", encodeImage);
+
+            try {
+                //convert this HashMap to encodedUrl to send to php file
+                String dataToSend = hashMapToUrl(detail);
+                //make a Http request and send data to saveImage.php file
+
+                //return the response
+                return RequestA.post(SERVER, dataToSend);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e(TAG, "ERROR  " + e);
+                return null;
+            }
+        }
+
+
+        @Override
+        protected void onPostExecute(String s) {
+            //show image uploaded
+            Toast.makeText(getApplicationContext(), "Crime Added Successfully", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
 }

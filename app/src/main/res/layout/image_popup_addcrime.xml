@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent">
+
+    <ImageView
+        android:id="@+id/im_popup_image"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="30dp" />
+
+    <Button
+        android:id="@+id/retry_image"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_below="@+id/im_popup_image"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_toLeftOf="@+id/done_image"
+        android:background="@color/transparent"
+        android:text="@string/retry_upload"
+        android:textColor="@color/black" />
+
+    <Button
+        android:id="@+id/done_image"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignRight="@id/im_popup_image"
+        android:layout_below="@+id/im_popup_image"
+        android:layout_marginBottom="10dp"
+        android:background="@color/transparent"
+        android:text="@string/done_image"
+        android:textColor="@color/black" />
+
+</RelativeLayout>

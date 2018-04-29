@@ -114,6 +114,9 @@
     <string name="welcome_crime_mapping">Welcome to CRIME MAPPING!</string>
     <string name="pressss">Press and hold a Location on map to Add a crime.</string>
     <string name="report_incident">Add Crime/Incident</string>
+    <string name="selectImage">Select Image</string>
+    <string name="retry_upload">Retry</string>
+    <string name="done_image">Done</string>
 
 
 </resources>

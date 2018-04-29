@@ -58,7 +58,10 @@ dependencies {
     compile 'com.mikhaellopez:circularimageview:3.0.0'
     implementation 'com.basgeekball:awesome-validation:2.0'
 
-
+    implementation 'com.android.support:exifinterface:28.0.0-alpha1'
+    compile 'com.github.chathuralakmal:AndroidImagePopup:1.2.1'
+    //noinspection GradleDynamicVersion
+    compile 'com.google.maps.android:android-maps-utils:0.5+'
 }
 
 
