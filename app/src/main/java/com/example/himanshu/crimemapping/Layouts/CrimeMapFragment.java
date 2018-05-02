@@ -109,7 +109,7 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
     boolean GpsStatus = true;
     LocationRequest mLocationRequest;
     Marker mCurrLocationMarker;
-    LatLng latLngLoc, mClickPos, kachraloc;
+    LatLng latLngLoc, mClickPos;
     String place_searched, LatfromList, LngfromList, aal, bbl;
     LatLng center;
     AlertDialog.Builder alertDialogBuilder;
@@ -117,11 +117,16 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
     SharedPreferences AddCrimesp;
     ProgressBar pb;
     ImagePopup imagePopup;
-    String ab;
+    String ab, picurl;
     LatLng aacha;
     ArrayList<LatLng> list = new ArrayList<>();
+    boolean kismat = false;
+
     HeatmapTileProvider mProvider;
     TileOverlay mOverlay;
+    Marker m;
+    float zoomlvl;
+    String id;
     private GoogleApiClient googleApiClient;
     private List<Crime> crimeList = new ArrayList<Crime>();
 
@@ -136,8 +141,8 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
         pb.setVisibility(View.VISIBLE);
 
         imagePopup = new ImagePopup(getActivity());
-        imagePopup.setWindowHeight(1200);
-        imagePopup.setWindowWidth(1050);
+//        imagePopup.setWindowHeight(1200);
+//        imagePopup.setWindowWidth(1050);
 
         crimeListsp = getContext().getSharedPreferences(crimelistsharedpref, Context.MODE_PRIVATE);
         AddCrimesp = getContext().getSharedPreferences(AddCrimesharedpref, Context.MODE_PRIVATE);
@@ -357,6 +362,7 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
 
         loadMarkersOnMap();
 
+
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
@@ -401,10 +407,12 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
             @Override
             public void onInfoWindowClick(final Marker marker) {
 
-                aacha = marker.getPosition();
-//                mmmm();
+//                aacha = marker.getPosition();
+                id = marker.getId();
 
-                imagePopup.initiatePopupWithPicasso("http://thetechnophile.000webhostapp.com/images_uploaded/noimage.jpg");
+                mmmm();
+
+                imagePopup.initiatePopupWithPicasso(picurl);
 
                 imagePopup.viewPopup();
 
@@ -423,19 +431,23 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
                     try {
 
                         JSONObject obj = response.getJSONObject(i);
+                        String compid = "m";
+                        String hai = Integer.toString(i);
 
-                        LatLng ppos = new LatLng(Double.parseDouble(obj.getString("crime_latitude")), Double.parseDouble(obj.getString("crime_longitude")));
-
-                        Toast.makeText(getActivity(), ppos.toString(), Toast.LENGTH_SHORT).show();
+//                        LatLng ppos = new LatLng(obj.getDouble("crime_latitude"),obj.getDouble("crime_longitude"));
 
 
-                        if (aacha == ppos) {
+                        if (id.equals(compid.concat(hai))) {
 
-                            imagePopup.initiatePopupWithPicasso(obj.getString("img_by_user"));
+//                            imagePopup.initiatePopupWithPicasso(obj.getString("img_by_user"));
+                            picurl = obj.getString("img_by_user");
+
+                            break;
 
                         }
 
-                        imagePopup.viewPopup();
+
+//                        imagePopup.viewPopup();
 
 
                     } catch (JSONException e) {
@@ -548,7 +560,8 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
                         idata.setDateReported(obj.getString("crime_reporting_date"));
                         idata.setTimeReported(obj.getString("crime_reporting_time"));
 
-                        Marker m = mMap.addMarker(markerOptions);
+                        m = mMap.addMarker(markerOptions);
+
                         m.setTag(idata);
                         m.hideInfoWindow();
 
@@ -728,19 +741,15 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
                 == PackageManager.PERMISSION_GRANTED) {
             LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, mLocationRequest, this);
         }
-
-
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-
     }
 
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
     }
 
     @Override
@@ -818,20 +827,35 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
     public void onCameraChange(CameraPosition cameraPosition) {
         mMap.setOnMapLoadedCallback(this);
 
-        if (cameraPosition.zoom < 9) {
+//        if (cameraPosition.zoom < 9) {
+//
+//           mMap.clear();
+//           addHeatMap();
+//        } else {
+//          mMap.clear();
+//          loadMarkersOnMap();
+//        }
 
-            mMap.clear();
-            addHeatMap();
-        } else {
-            mMap.clear();
-            loadMarkersOnMap();
-        }
 
         pb.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onMapLoaded() {
+
+        zoomlvl = mMap.getCameraPosition().zoom;
+
+
+        if (zoomlvl <= 9 && !kismat) {
+            mMap.clear();
+            addHeatMap();
+            kismat = true;
+        } else if (zoomlvl > 9 && kismat) {
+            mMap.clear();
+            loadMarkersOnMap();
+            kismat = false;
+        }
+
 
         pb.setVisibility(View.INVISIBLE);
 
@@ -851,7 +875,7 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
 
         Gradient gradient = new Gradient(colors, startPoints);
 
-        // Create a heat map tile provider, passing it the latlngs of the police stations.
+        // Create a heat map tile provider, passing it the latlngs.
 
         mProvider = new HeatmapTileProvider.Builder()
                 .data(list)
@@ -888,21 +912,5 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
             return null;
         }
     }
-
-//    private ArrayList<LatLng> readItems(int resource) throws JSONException {
-//        ArrayList<LatLng> list = new ArrayList<>();
-//        InputStream inputStream = getResources().openRawResource(resource);
-//        String json = new Scanner(inputStream).useDelimiter("\\A").next();
-//        JSONArray array = new JSONArray(json);
-//        for (int i = 0; i < array.length(); i++) {
-//            JSONObject object = array.getJSONObject(i);
-//            double lat = object.getDouble("lat");
-//            double lng = object.getDouble("lng");
-//            list.add(new LatLng(lat, lng));
-//        }
-//        return list;
-//    }
-
-
 }
 
