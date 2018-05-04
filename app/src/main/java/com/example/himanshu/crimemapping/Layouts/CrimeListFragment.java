@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
@@ -17,30 +18,42 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.himanshu.crimemapping.AppController;
 import com.example.himanshu.crimemapping.ConnectivityReceiver;
 import com.example.himanshu.crimemapping.Crime;
 import com.example.himanshu.crimemapping.CustomListAdapter;
 import com.example.himanshu.crimemapping.MyApplication;
 import com.example.himanshu.crimemapping.R;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import dmax.dialog.SpotsDialog;
 
@@ -56,6 +69,7 @@ public class CrimeListFragment extends Fragment implements ConnectivityReceiver.
     SwipeRefreshLayout mSwipeRefreshLayout;
     String latHai, lngHai;
     SharedPreferences crimeListsp;
+    String crime_type;
     private AlertDialog progressDialog;
     private List<Crime> crimeList = new ArrayList<>();
     private ListView listView;
@@ -105,6 +119,15 @@ public class CrimeListFragment extends Fragment implements ConnectivityReceiver.
             }
         });
         registerForContextMenu(listView);
+
+        loadList();
+
+        setHasOptionsMenu(true);
+        return v;
+    }
+
+
+    public void loadList() {
         progressDialog = new SpotsDialog(getActivity(), R.style.Custom3);
         progressDialog.show();
 
@@ -147,7 +170,6 @@ public class CrimeListFragment extends Fragment implements ConnectivityReceiver.
         });
 
         AppController.getInstance().addToRequestQueue(movieReq);
-        return v;
     }
 
     @Override
@@ -173,7 +195,6 @@ public class CrimeListFragment extends Fragment implements ConnectivityReceiver.
         }
         return super.onContextItemSelected(item);
     }
-
 
 
     private void shuffle() {
@@ -224,5 +245,243 @@ public class CrimeListFragment extends Fragment implements ConnectivityReceiver.
         showSnack(isConnected);
     }
 
+
+    @Override
+    public void onCreateOptionsMenu(final Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_crimelist, menu);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.FilterByRobbery:
+                crime_type = "Robbery";
+                listView.setAdapter(null);
+                runVolleyKaMethod();
+                loadList();
+                break;
+
+            case R.id.FilterByBikersGang:
+                crime_type = "Bikers gang robbery";
+                listView.setAdapter(null);
+                runVolleyKaMethod();
+                loadList();
+                break;
+
+            case R.id.FilterByMotorVehicle:
+                crime_type = "Motor Vehicle Theft";
+                listView.setAdapter(null);
+                runVolleyKaMethod();
+                loadList();
+                break;
+
+            case R.id.FilterByHijacking:
+                crime_type = "Hijacking";
+                listView.setAdapter(null);
+                runVolleyKaMethod();
+                loadList();
+                break;
+
+            case R.id.FilterByRobandKill:
+                crime_type = "Robbery and killing";
+                listView.setAdapter(null);
+                runVolleyKaMethod();
+                loadList();
+                break;
+
+            case R.id.FilterByDrug:
+                crime_type = "Drug Addicts";
+                listView.setAdapter(null);
+                runVolleyKaMethod();
+                loadList();
+                break;
+
+            case R.id.FilterByGarbage:
+                crime_type = "Garbage";
+                listView.setAdapter(null);
+                runVolleyKaMethod();
+                loadList();
+                break;
+
+            case R.id.FilterByAtm:
+                crime_type = "Robbery at ATM";
+                listView.setAdapter(null);
+                runVolleyKaMethod();
+                loadList();
+                break;
+
+            case R.id.FilterByHomicide:
+                crime_type = "Homicide";
+                listView.setAdapter(null);
+                runVolleyKaMethod();
+                loadList();
+                break;
+
+            case R.id.FilterByLoudSound:
+                crime_type = "Loud Sound";
+                listView.setAdapter(null);
+                runVolleyKaMethod();
+                loadList();
+                break;
+            case R.id.FilterBySexual:
+                crime_type = "Sexual violence";
+                listView.setAdapter(null);
+                runVolleyKaMethod();
+                loadList();
+                break;
+
+            case R.id.FilterByVandalism:
+                crime_type = "Vandalism";
+                listView.setAdapter(null);
+                runVolleyKaMethod();
+                loadList();
+                break;
+            case R.id.FilterByPolice:
+                crime_type = "Police Station";
+                listView.setAdapter(null);
+                runVolleyKaMethod();
+                loadList();
+                break;
+
+            case R.id.FilterByAnimals:
+                crime_type = "Crime Against Animals";
+                listView.setAdapter(null);
+                runVolleyKaMethod();
+                loadList();
+                break;
+            case R.id.FilterByDangerousPlace:
+                crime_type = "Dangerous place";
+                listView.setAdapter(null);
+                runVolleyKaMethod();
+                loadList();
+                break;
+
+
+//            case R.id.sortbyLatestCrime:
+//                listView.setAdapter(null);
+//
+//                String link = "http://thetechnophile.000webhostapp.com/load_crime.php";
+//                new CrimeListFragment.updateData().execute(link);
+//                loadList();
+//                break;
+//
+//            case R.id.sortbyOldestCrime:
+//                listView.setAdapter(null);
+//
+//                String link2 = "http://thetechnophile.000webhostapp.com/load_crime.php";
+//                new CrimeListFragment.updateData().execute(link2);
+//
+//                loadListOldest();
+//                break;
+
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
+
+    public void runVolleyKaMethod() {
+
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        String filter_url = "http://thetechnophile.000webhostapp.com/load_crime_filtered.php";
+        StringRequest postRequest = new StringRequest(Request.Method.POST, filter_url, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("crime_type", crime_type);
+                return params;
+            }
+        };
+        postRequest.setRetryPolicy(new DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        queue.add(postRequest);
+    }
+
+
+//    public void loadListOldest() {
+//        progressDialog = new SpotsDialog(getActivity(), R.style.Custom3);
+//        progressDialog.show();
+//
+//        JsonArrayRequest movieReq = new JsonArrayRequest(url,
+//                new Response.Listener<JSONArray>() {
+//                    @Override
+//                    public void onResponse(JSONArray response) {
+//                        Log.d(TAG, response.toString());
+//                        progressDialog.hide();
+//
+//                        // Parsing json
+//                        for (int i = 0; i <= response.length(); i--) {
+//                            try {
+//                                JSONObject obj = response.getJSONObject(i);
+//                                Crime movie = new Crime();
+//                                movie.setTitle(obj.getString("crime_type"));
+//                                movie.setThumbnailUrl(obj.getString("crime_image_marker"));
+//                                movie.setDes(obj.getString("crime_description"));
+//                                movie.setDate(obj.getString("crime_date"));
+//                                movie.setTime(obj.getString("crime_time"));
+//                                movie.setLat(obj.getString("crime_latitude"));
+//                                movie.setLng(obj.getString("crime_longitude"));
+//                                movie.setAddress(obj.getString("crime_location_address"));
+//
+//                                crimeList.add(movie);
+//
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                        adapter.notifyDataSetChanged();
+//                    }
+//                }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                VolleyLog.d(TAG, "Error: " + error.getMessage());
+//                progressDialog.hide();
+//
+//            }
+//        });
+//
+//        AppController.getInstance().addToRequestQueue(movieReq);
+//    }
+
+
+//    private class updateData extends AsyncTask<String, String, String> {
+//
+//        @Override
+//        protected String doInBackground(String... params) {
+//            HttpURLConnection conn = null;
+//
+//            try {
+//                URL url;
+//                url = new URL(params[0]);
+//                conn = (HttpURLConnection) url.openConnection();
+//                if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+//                    conn.getInputStream();
+//                } else {
+//                    conn.getErrorStream();
+//                }
+//                return "Done";
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            } finally {
+//                if (conn != null) {
+//                    conn.disconnect();
+//                }
+//            }
+//            return null;
+//        }
+//    }
+//
 
 }

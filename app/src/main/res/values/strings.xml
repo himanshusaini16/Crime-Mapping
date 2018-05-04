@@ -117,6 +117,10 @@
     <string name="selectImage">Select Image</string>
     <string name="retry_upload">Retry</string>
     <string name="done_image">Done</string>
+    <string name="l_crime">Newest Crime First</string>
+    <string name="sort_by">Sort By</string>
+    <string name="ol_crime">Oldest Crime First</string>
+    <string name="crime_type_filter">Filter By (CRIME TYPE):</string>
 
 
 </resources>

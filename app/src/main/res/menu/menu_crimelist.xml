@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <!--<item-->
+    <!--android:id="@+id/sortbyid"-->
+    <!--android:icon="@drawable/ic_swap_vert_black_24dp"-->
+    <!--android:orderInCategory="1"-->
+    <!--android:title="@string/sort_by"-->
+    <!--app:showAsAction="always">-->
+
+    <!--<menu>-->
+    <!--<item-->
+    <!--android:id="@+id/sortbyLatestCrime"-->
+    <!--android:orderInCategory="1"-->
+    <!--android:title="@string/l_crime"-->
+    <!--app:showAsAction="always" />-->
+
+    <!--<item-->
+    <!--android:id="@+id/sortbyOldestCrime"-->
+    <!--android:orderInCategory="1"-->
+    <!--android:title="@string/ol_crime"-->
+    <!--app:showAsAction="always" />-->
+    <!--</menu>-->
+
+
+    <!--</item>-->
+
+
+    <item
+        android:id="@+id/filterby"
+        android:icon="@drawable/ic_sort_black_24dp"
+        android:orderInCategory="2"
+        android:title=""
+        app:showAsAction="always">
+
+        <menu>
+            <item
+                android:id="@+id/filterbycrimetype"
+                android:orderInCategory="1"
+                android:title="@string/crime_type_filter"
+                app:showAsAction="always" />
+
+
+            <item
+                android:id="@+id/FilterByRobbery"
+                android:orderInCategory="2"
+                android:title="@string/crime_assalt"
+                app:showAsAction="always" />
+            <item
+                android:id="@+id/FilterByBikersGang"
+                android:orderInCategory="3"
+                android:title="@string/crime_moto"
+                app:showAsAction="always" />
+            <item
+                android:id="@+id/FilterByMotorVehicle"
+                android:orderInCategory="4"
+                android:title="@string/crime_car"
+                app:showAsAction="always" />
+            <item
+                android:id="@+id/FilterByHijacking"
+                android:orderInCategory="5"
+                android:title="@string/crime_hijack"
+                app:showAsAction="always" />
+            <item
+                android:id="@+id/FilterByRobandKill"
+                android:orderInCategory="6"
+                android:title="@string/crime_robandkill"
+                app:showAsAction="always" />
+            <item
+                android:id="@+id/FilterByDrug"
+                android:orderInCategory="7"
+                android:title="@string/crime_drugs"
+                app:showAsAction="always" />
+            <item
+                android:id="@+id/FilterByGarbage"
+                android:orderInCategory="8"
+                android:title="@string/crime_garbage"
+                app:showAsAction="always" />
+
+            <item
+                android:id="@+id/FilterByAtm"
+                android:orderInCategory="9"
+                android:title="@string/crime_bank"
+                app:showAsAction="always" />
+            <item
+                android:id="@+id/FilterByHomicide"
+                android:orderInCategory="10"
+                android:title="@string/crime_homicide"
+                app:showAsAction="always" />
+            <item
+                android:id="@+id/FilterByLoudSound"
+                android:orderInCategory="11"
+                android:title="@string/crime_loudsound"
+                app:showAsAction="always" />
+            <item
+                android:id="@+id/FilterBySexual"
+                android:orderInCategory="12"
+                android:title="@string/crime_sex"
+                app:showAsAction="always" />
+            <item
+                android:id="@+id/FilterByVandalism"
+                android:orderInCategory="13"
+                android:title="@string/crime_vandalism"
+                app:showAsAction="always" />
+            <item
+                android:id="@+id/FilterByPolice"
+                android:orderInCategory="14"
+                android:title="@string/crime_police"
+                app:showAsAction="always" />
+            <item
+                android:id="@+id/FilterByAnimals"
+                android:orderInCategory="15"
+                android:title="@string/crime_animal"
+                app:showAsAction="always" />
+
+            <item
+                android:id="@+id/FilterByDangerousPlace"
+                android:orderInCategory="16"
+                android:title="@string/crime_danplace"
+                app:showAsAction="always" />
+
+
+        </menu>
+
+
+    </item>
+
+
+</menu>

@@ -73,7 +73,7 @@ public class BottomNavigationHomeActivity extends AppCompatActivity {
         }
     }
 
-    protected void pushFragment(Fragment fragment) {
+    public void pushFragment(Fragment fragment) {
         if (fragment == null)
             return;
 
