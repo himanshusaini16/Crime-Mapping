@@ -141,8 +141,6 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
         pb.setVisibility(View.VISIBLE);
 
         imagePopup = new ImagePopup(getActivity());
-//        imagePopup.setWindowHeight(1200);
-//        imagePopup.setWindowWidth(1050);
 
         crimeListsp = getContext().getSharedPreferences(crimelistsharedpref, Context.MODE_PRIVATE);
         AddCrimesp = getContext().getSharedPreferences(AddCrimesharedpref, Context.MODE_PRIVATE);
@@ -197,6 +195,7 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
                 if (searchMenuItem != null) {
                     searchMenuItem.collapseActionView();
                 }
+
                 return false;
             }
 
@@ -234,6 +233,7 @@ public class CrimeMapFragment extends Fragment implements OnMapReadyCallback, Lo
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
             Address address = addressList.get(0);
             LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
             mMap.addMarker(new MarkerOptions().position(latLng).title("Searched Location"));
